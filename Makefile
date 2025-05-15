@@ -12,7 +12,7 @@ SRC_FILES = $(wildcard $(SRC_DIR)/*/*.cpp)
 OBJ_FILES = $(patsubst $(SRC_DIR)/%.cpp, $(BUILD_DIR)/%.o, $(SRC_FILES))
 
 # 実行ファイルの名前
-TARGET = optimizer_TWPA
+TARGET = optTWPA
 
 # デフォルトのターゲット
 all: $(TARGET)

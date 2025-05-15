@@ -16,7 +16,8 @@ using namespace std;
 
 int main(int argc, const char *argv[]) {
 
-    execute_julia(); // julia を実行
-
+    element ele;
+    //execute_julia(); // julia を実行
+    read_jl(ele);
     return 0;
 }
