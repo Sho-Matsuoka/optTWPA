@@ -34,16 +34,39 @@ void read_jl(element &ele){
         liness.str("");   // the same as above
         //cout << line << endl;                            
         liness << line; //input line into liness
-        liness >> ele_name >> ignore >> ele_value;   //taking apart liness to name and value.
+        liness >> ele_name >> ignore >> buf;   //taking apart liness to name and value.
 
-        if (ele_name == "Cj"){  //read Lj
+        if (ele_name == "Lj"){  //read Lj
+            if (buf.find("(") != string::npos){  // inser space after "("
+                buf.insert(buf.rfind("(") + 1, " ");
+            }            
+            if (buf.rfind(")") != string::npos){ // inser space before ")"
+                buf.insert(buf.rfind(")"), " ");
+            }            
             liness.clear();   // reset string stream (liness)
             liness.str("");   // the same as above
-            liness << buf;
-            liness >> ignore >> ele_value >> ignore;
-            cout << liness.str() << endl;
+            liness << buf;    // buf: IctoL( 6.4e-6 ),
+            liness >> ignore >> ele_value >> ignore; 
             ele.Lj = ele_value;
-            cout << ele_value << endl;
         }
+        else if (ele_name == "Cg"){  //read Cg
+            ele.Cg = stod(buf);   // cast string(buf) => double(ele.Cg)
+        }
+        else if (ele_name == "Cc"){  //read Cc
+            ele.Cc = stod(buf);
+        }
+        else if (ele_name == "Cn"){  //read Cn
+            ele.Cn = stod(buf);
+        }
+        else if (ele_name == "Cr"){  //read Cr
+            ele.Cr = stod(buf);
+        }
+        else if (ele_name == "Lr"){  //read Lr
+            ele.Lr = stod(buf);
+        }
+        else if (ele_name == "Ip"){  //read Ip
+            ele.Ip = stod(buf);
+        }
+
     }
 }

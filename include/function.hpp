@@ -6,16 +6,21 @@
 
 
 struct element{
-    double Lj = 6.4e-6;
-    double Cg = 25.0e-15;
-    double Cc = 18.0e-15;
-    double Cn = 6.001e-15;
-    double Cr = 5.00e-12;
-    double Lr = 65e-12;
-    double Ip = 3.6001e-6;
+    double Lj = 0;
+    double Cg = 0;
+    double Cc = 0;
+    double Cn = 0;
+    double Cr = 0;
+    double Lr = 0;
+    double Ip = 0;
 };
-//execute.cpp
+//execute
 void execute_julia();
+
+//read_file
 void read_jl(element &ele);
+
+//display
+void display_element(element &ele);
 
 #endif
