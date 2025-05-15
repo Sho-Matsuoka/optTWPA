@@ -19,5 +19,7 @@ int main(int argc, const char *argv[]) {
     element ele;
     //execute_julia(); // julia を実行
     read_jl(ele);
+    display_element(ele);
+    
     return 0;
 }
