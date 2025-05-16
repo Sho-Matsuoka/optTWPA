@@ -14,13 +14,15 @@
 using namespace std;
 
 void read_jl(element &ele){
-
-
+ 
+    ele.lines.clear();    //reset ele.lines(composed of each line_num)
     string jlfile_name = "TWPA.jl";  //.jl file name
     string line, ignore, buf, ele_name; // for reading name  each element.
     double ele_value = 0;          // for reading value each element.
+    int line_num = 0;
     stringstream liness;   //for stringstream of each .jl line
     ifstream file(jlfile_name);  // open .jl file
+
 
     if(!filesystem::is_regular_file(jlfile_name)){ //if  there is not .jl file.
         cout << jlfile_name << " is not found!" << endl;
@@ -48,25 +50,38 @@ void read_jl(element &ele){
             liness << buf;    // buf: IctoL( 6.4e-6 ),
             liness >> ignore >> ele_value >> ignore; 
             ele.Lj = ele_value;
+            (ele.lines).push_back(line_num);
+            //cout << line_num << endl;
         }
         else if (ele_name == "Cg"){  //read Cg
             ele.Cg = stod(buf);   // cast string(buf) => double(ele.Cg)
+            (ele.lines).push_back(line_num);
+
         }
-        else if (ele_name == "Cc"){  //read Cc
+        else if (ele_name == "Cc"){  //read Cc 
             ele.Cc = stod(buf);
+            (ele.lines).push_back(line_num);
+
         }
         else if (ele_name == "Cn"){  //read Cn
             ele.Cn = stod(buf);
+            (ele.lines).push_back(line_num);
+
         }
         else if (ele_name == "Cr"){  //read Cr
             ele.Cr = stod(buf);
+            (ele.lines).push_back(line_num);
+
         }
         else if (ele_name == "Lr"){  //read Lr
             ele.Lr = stod(buf);
+            (ele.lines).push_back(line_num);
+ 
         }
         else if (ele_name == "Ip"){  //read Ip
             ele.Ip = stod(buf);
+            (ele.lines).push_back(line_num);
         }
-
+        line_num++;
     }
 }

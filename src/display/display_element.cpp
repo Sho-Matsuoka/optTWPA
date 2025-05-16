@@ -23,4 +23,7 @@ void display_element(element &ele){
     cout << "Lr: " << ele.Lr << endl;
     cout << "Ip: " << ele.Ip << endl;
 
+    for (auto& num : ele.lines) {
+        cout << num << endl;
+    }
 }

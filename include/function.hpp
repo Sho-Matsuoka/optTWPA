@@ -13,6 +13,18 @@ struct element{
     double Cr = 0;
     double Lr = 0;
     double Ip = 0;
+    std::vector<int> lines;
+
+    element()
+      : Lj(0)
+      , Cg(0)
+      , Cc(0)
+      , Cn(0)
+      , Cr(0)
+      , Lr(0)
+      , Ip(0)
+      , lines()    // ← ここで空 vector
+    {}
 };
 //execute
 void execute_julia();
