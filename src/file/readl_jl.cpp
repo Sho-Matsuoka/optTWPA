@@ -13,12 +13,12 @@
 
 using namespace std;
 
-void read_jl(element &ele){
+void read_jl(vector<ele_unit> &ele, vector<string> &jl_source){
  
-    ele.lines.clear();    //reset ele.lines(composed of each line_num)
+    //ele.lines.clear();    //reset ele.lines(composed of each line_num)
     string jlfile_name = "TWPA.jl";  //.jl file name
     string line, ignore, buf, ele_name; // for reading name  each element.
-    double ele_value = 0;          // for reading value each element.
+    //double ele_value = 0;          // for reading value each element.
     int line_num = 0;
     stringstream liness;   //for stringstream of each .jl line
     ifstream file(jlfile_name);  // open .jl file
@@ -31,13 +31,34 @@ void read_jl(element &ele){
     if (!file.is_open()) {  // if .jl file can't be opened.
         cerr << "Error opening file: " << jlfile_name;
     }
-    while( getline(file, line)) {
+    while(getline(file, line)) {
         liness.clear();   // reset string stream (liness)
         liness.str("");   // the same as above
         //cout << line << endl;                            
         liness << line; //input line into liness
         liness >> ele_name >> ignore >> buf;   //taking apart liness to name and value.
 
+        jl_source.emplace_back(line); // insert line to jl_source
+
+        if (ele_name == "Lj" || ele_name == "Cg" || ele_name == "Cc" || ele_name == "Cn" || ele_name == "Cr" || ele_name == "Lr" || ele_name == "Ip"){  //read Cg
+            //ele_value = stod(buf);   // cast string(buf) => double(ele.Cg)
+            if (ele_name == "Lj"){  //read Lj
+                if (buf.find("(") != string::npos){  // inser space after "("
+                    buf.insert(buf.rfind("(") + 1, " ");
+                }            
+                if (buf.rfind(")") != string::npos){ // inser space before ")"
+                    buf.insert(buf.rfind(")"), " ");
+                }            
+                liness.clear();   // reset string stream (liness)
+                liness.str("");   // the same as above
+                liness << buf;    // buf: IctoL( 6.4e-6 ),
+                liness >> ignore >> buf >> ignore; 
+                //ele.Lj = ele_value;
+                //(ele.lines).push_back(line_num);
+            }
+            ele.push_back({ele_name, stod(buf), line_num});
+        }
+        /*
         if (ele_name == "Lj"){  //read Lj
             if (buf.find("(") != string::npos){  // inser space after "("
                 buf.insert(buf.rfind("(") + 1, " ");
@@ -82,6 +103,8 @@ void read_jl(element &ele){
             ele.Ip = stod(buf);
             (ele.lines).push_back(line_num);
         }
+
+*/
         line_num++;
-    }
+}
 }
