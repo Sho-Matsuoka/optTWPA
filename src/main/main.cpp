@@ -16,9 +16,11 @@ using namespace std;
 
 int main(int argc, const char *argv[]) {
 
-    element ele;
+    vector<ele_unit> ele;
+    vector<string> jl_source;
     //execute_julia(); // julia を実行
-    read_jl(ele);
+    read_jl(ele, jl_source);
+    write_jl(ele, jl_source);
     display_element(ele);
     
     return 0;
