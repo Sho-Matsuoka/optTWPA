@@ -13,17 +13,8 @@
 
 using namespace std;
 
-void display_element(element &ele){
-
-    cout << "Lj: " << ele.Lj << endl;
-    cout << "Cg: " << ele.Cg << endl;
-    cout << "Cc: " << ele.Cc << endl;
-    cout << "Cn: " << ele.Cn << endl;
-    cout << "Cr: " << ele.Cr << endl;
-    cout << "Lr: " << ele.Lr << endl;
-    cout << "Ip: " << ele.Ip << endl;
-
-    for (auto& num : ele.lines) {
-        cout << num << endl;
+void display_element(vector<ele_unit> &ele){
+    for (auto& elem : ele) {
+        cout << " name: " << left << setw(2) <<  elem.name << ", value: " << setw(10) << elem.value << ", line: " << setw(4) << elem.line << endl;
     }
 }

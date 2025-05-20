@@ -4,6 +4,12 @@
 #include <string>
 #include <vector>
 
+struct ele_unit{
+    std::string name;
+    double value;
+    int line;
+};
+
 
 struct element{
     double Lj = 0;
@@ -14,25 +20,15 @@ struct element{
     double Lr = 0;
     double Ip = 0;
     std::vector<int> lines;
-
-    element()
-      : Lj(0)
-      , Cg(0)
-      , Cc(0)
-      , Cn(0)
-      , Cr(0)
-      , Lr(0)
-      , Ip(0)
-      , lines()    // ← ここで空 vector
-    {}
 };
 //execute
 void execute_julia();
 
-//read_file
-void read_jl(element &ele);
+//file
+void read_jl(std::vector<ele_unit> &ele, std::vector<std::string> &jl_source);
+void write_jl(std::vector<ele_unit> &ele, std::vector<std::string> &jl_source);
 
 //display
-void display_element(element &ele);
+void display_element(std::vector<ele_unit> &ele);
 
 #endif
