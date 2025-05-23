@@ -35,5 +35,7 @@ void display_element(std::vector<ele_unit> &ele);
 //calculation
 double calc_gain(std::vector<std::vector<double>> csv_array);
 double calc_band(std::vector<std::vector<double>> csv_array, double gain);
+double calc_ripple(std::vector<std::vector<double>> csv_array);
+double calc_freq_r(std::vector<ele_unit> ele);
 
 #endif

@@ -43,20 +43,20 @@ function main()
     push!(circuit, ("P$(j)_$(0)", "$(j)", "0", 2))
 
     circuitdefs = Dict(
-        Lj => IctoLj(6.4e-6),  #IctoLjの引数は臨界電流値. それに応じたジョセフソンインダクタンスを返す.
-        Cg => 25.0e-15,
-        Cc => 18.0e-15,
+        Lj => IctoLj(6.4e-06),
+        Cg => 2.5e-14,
+        Cc => 1.8e-14,
         Cn => 6.001e-15,
-        Cr => 5.00e-12,
-        Lr => 65e-12,
+        Cr => 5e-12,
+        Lr => 6.5e-11,
         Cj => 164e-15,
         Rleft => 50.0,
         Rright => 50.0,
     )
 
-    ws  = 2π * (6.0:0.01:12) * 1e9    #ここで周波数(横軸を変更): (開始値:ステップ幅:終了値)
+    ws  = 2π * (1.0:0.1:16) * 1e9    #ここで周波数(横軸を変更): (開始値:ステップ幅:終了値)
     wp  = (2π*8.7*1e9,)
-    Ip  = 3.6001e-6
+    Ip  = 3.6001e-06
     sources = [(mode=(1,), port=1, current=Ip)]
     Npumpharmonics       = (20,)
     Nmodulationharmonics = (10,)
@@ -115,51 +115,47 @@ function main()
     
     plot(p1, p2, p3, p4, layout = (2, 2))
 
-+    # 周波数とゲインを普通のベクトルに変換
-    freq_vec = collect(ws ./(2π*1e9))
+    freq = ws/(2*pi*1e9)
+    gain = 10*log10.(abs2.(rpm.linearized.S(
+                outputmode=(0,),
+                outputport=2,
+                inputmode=(0,),
+                inputport=1,
+                freqindex=:)))
+    fieldnames(typeof(gain))
 
-    # S21 を取り出してゲインを計算
-    rawS21 = rpm.linearized.S((0,), 2, (0,), 1, :)
-    gain_vec = 10 .* log10.(abs2.(rawS21))
-
-    # CSV 出力
-    open("freq_gain_sim.csv", "w") do io
-        # ヘッダ
-        println(io, "frequency_GHz,gain_dB")
-        # 各行を f,g の組で書き込み
-        for (f, g) in zip(freq_vec, gain_vec)
-            println(io, f, ",", g)
-        end
-    end
+    # データを書き出し
+    writedlm("freq_gain_sim.txt", ws/(2π*1e9))
+    writedlm("trans_gain_sim.txt", 10*log10.(abs2.(rpm.linearized.S((0,),2,(0,),1,:))))
 end
 
-
 function plot_gain()
-    # CSV読み込み (ヘッダ行を１行スキップ)
-    data = readdlm("freq_gain_sim.csv", ',', skipstart=1)
-    x = vec(data[:, 1])   # Frequency [GHz]
-    y = vec(data[:, 2])   # Gain [dB]
+    x = readdlm("freq_gain_sim.txt") |> vec
+    y = readdlm("trans_gain_sim.txt") |> vec
 
-    # データ長チェック
+    # データ長をチェック（オプション）
     if length(x) != length(y)
-        error("There is a difference between x and y: ",
-              length(x), " ≠ ", length(y))
+        error("There is a difference between x and y. ", length(x), " ≠ ", length(y))
     end
 
     # プロット
     plt = plot(
-        x, y;
-        xlabel    = "Frequency [GHz]",
-        ylabel    = "Gain [dB]",
-        legend    = false,
-        seriestype = :line,
-        marker     = :none,
-        line       = (:solid, 2),
+        x, y,
+        xlabel = "Frequency [GHz]",
+        ylabel = "Gain [dB]",
+        legend = false,
+        seriestype = :line,    # 線グラフ専用で描く
+        marker      = :none,   # マーカー（点）を完全にオフ
+        line   = (:solid, 2),
     )
 
+    # 画面表示
     display(plt)
-    savefig(plt, "gain_.png")
+
+    # ファイルに保存する場合
+    savefig(plt, "gain.png")
 end
+
 
 # スクリプト実行時に main() を呼ぶ
 if abspath(PROGRAM_FILE) == @__FILE__
