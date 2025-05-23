@@ -25,7 +25,7 @@ int main(int argc, const char *argv[]) {
     vector<vector<double>> csv_array = read_csv();
     cout << " Gain     : " << calc_gain(csv_array) << endl;
     cout << " Bandwidth: " << calc_band(csv_array, calc_gain(csv_array)) << endl;
-
+    cout << " freq_r   : " << calc_freq_r(ele) << endl;
 
     return 0;
 }
