@@ -22,6 +22,10 @@ int main(int argc, const char *argv[]) {
     read_jl(ele, jl_source);
     write_jl(ele, jl_source);
     display_element(ele);
-    
+    vector<vector<double>> csv_array = read_csv();
+    cout << " Gain     : " << calc_gain(csv_array) << endl;
+    cout << " Bandwidth: " << calc_band(csv_array, calc_gain(csv_array)) << endl;
+
+
     return 0;
 }

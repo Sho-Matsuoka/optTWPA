@@ -14,7 +14,7 @@
 using namespace std;
 
 void execute_julia(){
-    string command_jl = "julia TWPA.jl";
+    string command_jl = "julia TWPA_src.jl";
     if(system(command_jl.c_str()) == -1){ //Juliaの実行が失敗した場合
         cout << "error:julia was not executed correctly." << endl;
     }
