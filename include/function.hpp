@@ -27,8 +27,13 @@ void execute_julia();
 //file
 void read_jl(std::vector<ele_unit> &ele, std::vector<std::string> &jl_source);
 void write_jl(std::vector<ele_unit> &ele, std::vector<std::string> &jl_source);
+std::vector<std::vector<double>> read_csv();
 
 //display
 void display_element(std::vector<ele_unit> &ele);
+
+//calculation
+double calc_gain(std::vector<std::vector<double>> csv_array);
+double calc_band(std::vector<std::vector<double>> csv_array, double gain);
 
 #endif

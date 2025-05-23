@@ -43,10 +43,10 @@ void read_jl(vector<ele_unit> &ele, vector<string> &jl_source){
         if (ele_name == "Lj" || ele_name == "Cg" || ele_name == "Cc" || ele_name == "Cn" || ele_name == "Cr" || ele_name == "Lr" || ele_name == "Ip"){  //read Cg
             //ele_value = stod(buf);   // cast string(buf) => double(ele.Cg)
             if (ele_name == "Lj"){  //read Lj
-                if (buf.find("(") != string::npos){  // inser space after "("
+                if (buf.find("(") != string::npos){  // insert space after "("
                     buf.insert(buf.rfind("(") + 1, " ");
                 }            
-                if (buf.rfind(")") != string::npos){ // inser space before ")"
+                if (buf.rfind(")") != string::npos){ // insert space before ")"
                     buf.insert(buf.rfind(")"), " ");
                 }            
                 liness.clear();   // reset string stream (liness)
@@ -58,53 +58,7 @@ void read_jl(vector<ele_unit> &ele, vector<string> &jl_source){
             }
             ele.push_back({ele_name, stod(buf), line_num});
         }
-        /*
-        if (ele_name == "Lj"){  //read Lj
-            if (buf.find("(") != string::npos){  // inser space after "("
-                buf.insert(buf.rfind("(") + 1, " ");
-            }            
-            if (buf.rfind(")") != string::npos){ // inser space before ")"
-                buf.insert(buf.rfind(")"), " ");
-            }            
-            liness.clear();   // reset string stream (liness)
-            liness.str("");   // the same as above
-            liness << buf;    // buf: IctoL( 6.4e-6 ),
-            liness >> ignore >> ele_value >> ignore; 
-            ele.Lj = ele_value;
-            (ele.lines).push_back(line_num);
-            //cout << line_num << endl;
-        }
-        else if (ele_name == "Cg"){  //read Cg
-            ele.Cg = stod(buf);   // cast string(buf) => double(ele.Cg)
-            (ele.lines).push_back(line_num);
 
-        }
-        else if (ele_name == "Cc"){  //read Cc 
-            ele.Cc = stod(buf);
-            (ele.lines).push_back(line_num);
-
-        }
-        else if (ele_name == "Cn"){  //read Cn
-            ele.Cn = stod(buf);
-            (ele.lines).push_back(line_num);
-
-        }
-        else if (ele_name == "Cr"){  //read Cr
-            ele.Cr = stod(buf);
-            (ele.lines).push_back(line_num);
-
-        }
-        else if (ele_name == "Lr"){  //read Lr
-            ele.Lr = stod(buf);
-            (ele.lines).push_back(line_num);
- 
-        }
-        else if (ele_name == "Ip"){  //read Ip
-            ele.Ip = stod(buf);
-            (ele.lines).push_back(line_num);
-        }
-
-*/
         line_num++;
 }
 }
