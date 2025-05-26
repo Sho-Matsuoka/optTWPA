@@ -33,7 +33,7 @@ std::vector<std::vector<double>> read_csv();
 void display_element(std::vector<ele_unit> &ele);
 
 //calculation
-double calc_gain(std::vector<std::vector<double>> csv_array);
+double calc_gain(std::vector<std::vector<double>> csv_array, double freq_r);
 double calc_band(std::vector<std::vector<double>> csv_array, double gain);
 double calc_ripple(std::vector<std::vector<double>> csv_array);
 double calc_freq_r(std::vector<ele_unit> ele);
