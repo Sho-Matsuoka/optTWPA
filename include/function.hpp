@@ -1,6 +1,8 @@
 #ifndef FUNCTION_H
 #define FUNCTION_H
 
+constexpr double WIDTH_F = 1.5;
+
 #include <string>
 #include <vector>
 
@@ -9,7 +11,6 @@ struct ele_unit{
     double value;
     int line;
 };
-
 
 struct element{
     double Lj = 0;
@@ -35,7 +36,7 @@ void display_element(std::vector<ele_unit> &ele);
 //calculation
 double calc_gain(std::vector<std::vector<double>> csv_array, double freq_r);
 double calc_band(std::vector<std::vector<double>> csv_array, double gain);
-double calc_ripple(std::vector<std::vector<double>> csv_array);
+double calc_ripple(std::vector<std::vector<double>> csv_array, double freq_r);
 double calc_freq_r(std::vector<ele_unit> ele);
 
 #endif
