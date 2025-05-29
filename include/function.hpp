@@ -12,6 +12,12 @@ struct ele_unit{
     int line;
 };
 
+struct result{
+    double gain;
+    double bandwidth;
+    double ripple;
+};
+
 struct element{
     double Lj = 0;
     double Cg = 0;
@@ -23,7 +29,7 @@ struct element{
     std::vector<int> lines;
 };
 //execute
-void execute_julia();
+void execute_julia(std::string jl_source);
 
 //file
 void read_jl(std::vector<ele_unit> &ele, std::vector<std::string> &jl_source);
@@ -34,9 +40,12 @@ std::vector<std::vector<double>> read_csv();
 void display_element(std::vector<ele_unit> &ele);
 
 //calculation
+result calculation(std::vector<ele_unit> ele, std::vector<std::string> &jl_source);
 double calc_gain(std::vector<std::vector<double>> csv_array, double freq_r);
 double calc_band(std::vector<std::vector<double>> csv_array, double gain);
 double calc_ripple(std::vector<std::vector<double>> csv_array, double freq_r);
 double calc_freq_r(std::vector<ele_unit> ele);
+
+ele_unit change_param(std::vector<std::string> &jl_source);
 
 #endif

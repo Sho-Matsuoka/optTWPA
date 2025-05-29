@@ -98,7 +98,6 @@ function main()
             println(io, "$f,$g")
         end
     end
-    println("Simulation & CSV output completed.")
 end
 
 # プロット関数
@@ -106,7 +105,7 @@ function plot_gain()
     data = readdlm("freq_gain_sim.csv", ',', skipstart=1)
     x, y = vec(data[:,1]), vec(data[:,2])
     if length(x) != length(y)
-        error("xとyの長さが異なります: ", length(x), " ≠ ", length(y))
+        error("The length of x and y is different.: ", length(x), " ≠ ", length(y))
     end
     plt = plot(
         x, y;
@@ -124,5 +123,5 @@ end
 # スクリプト直接実行時のエントリーポイント
 if abspath(PROGRAM_FILE) == @__FILE__
     main()
-    plot_gain()
+    #plot_gain()
 end
