@@ -13,9 +13,10 @@
 
 using namespace std;
 
-void execute_julia(){
-    string command_jl = "julia TWPA_src.jl";
-    if(system(command_jl.c_str()) == -1){ //Juliaの実行が失敗した場合
+void execute_julia(string jl_source){
+    stringstream command_jl ;
+    command_jl << "julia " << jl_source;
+    if(system(command_jl.str().c_str()) == -1){ //Juliaの実行が失敗した場合
         cout << "error:julia was not executed correctly." << endl;
     }
 }
