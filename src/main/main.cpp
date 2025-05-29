@@ -18,15 +18,14 @@ int main(int argc, const char *argv[]) {
 
     vector<ele_unit> ele;
     vector<string> jl_source;
-    //execute_julia(); // julia を実行
+    //cout << "exuecuting Julia ..." << endl;
+    //execute_julia("TWPA_src.jl"); // julia を実行
     read_jl(ele, jl_source);
-    write_jl(ele, jl_source);
+    //write_jl(ele, jl_source);
     display_element(ele);
-    vector<vector<double>> csv_array = read_csv();
-    cout << " Gain     : " << calc_gain(csv_array, calc_freq_r(ele)) << " dB" << endl;
-    cout << " Bandwidth: " << calc_band(csv_array, calc_gain(csv_array, calc_freq_r(ele))) << " GHz" << endl;
-    cout << " Ripple   : " << calc_ripple(csv_array, calc_freq_r(ele)) << " dB" << endl;
-    cout << " freq_r   : " << calc_freq_r(ele) << " GHz" << endl;
+
+    calculation(ele, jl_source);
+
 
     return 0;
 }
