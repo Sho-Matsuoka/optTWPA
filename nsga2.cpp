@@ -27,15 +27,18 @@ double compute_Cn(double Cg, double Cc, double Lj) {
 
 // 評価＆制約判定
 // ripple>0.1 なら false を返し，個体は破棄
-bool evaluate(Individual &ind, double Lj) {
+bool evaluate(Individual &ind, double Lj, std::vector<ele_unit> ele, std::vector<std::string> jl_source) {
 
     //change_param();
     double Cg = ind.x0;
     double Cc = ind.x1;
     double Cn = compute_Cn(Cg, Cc, Lj);
+    change_param(ele, "Cg", Cg);
+    change_param(ele, "Cc", Cc);
     if (Cn <= 0.0) return false;
+    change_param(ele, "Cn", Cn);
     // 外部計算
-    result r = calculation(Cg, Cc, Cn);
+    result r = calculation(ele, jl_source);
     if (r.ripple > 0.1) return false;
     // NSGA-II は最小化なので符号を反転
     ind.f1     = -r.gain;
@@ -151,10 +154,7 @@ void mutate(Individual& ind, double eta_m, double pm, double Cg_min, double Cg_m
     if(uni(rng) < pm) ind.x1 = poly(ind.x1, Cc_min, Cc_max);
 }
 
-std::vector<Individual> init_population(int pop_size,
-                                        double Lj,
-                                        double Cg_min, double Cg_max,
-                                        double Cc_min, double Cc_max) {
+std::vector<Individual> init_population(int pop_size, std::vector<ele_unit> ele, std::vector<std::string> jl_source, double Lj, double Cg_min, double Cg_max, double Cc_min, double Cc_max) {
     std::uniform_real_distribution<> dCg(Cg_min, Cg_max);
     std::uniform_real_distribution<> dCc(Cc_min, Cc_max);
     std::vector<Individual> pop;
@@ -163,14 +163,14 @@ std::vector<Individual> init_population(int pop_size,
         Individual ind;
         ind.x0 = dCg(rng);
         ind.x1 = dCc(rng);
-        if(evaluate(ind, Lj)) pop.push_back(ind);
+        if(evaluate(ind, Lj, ele, jl_source)) pop.push_back(ind);
     }
     return pop;
 }
 
 } // anonymous
 
-void run_nsga2(int pop_size,int generations, double Lj, double Cg_min, double Cg_max,  double Cc_min, double Cc_max) {
+void run_nsga2(int pop_size,int generations, std::vector<ele_unit> ele, std::vector<std::string> jl_source, double Lj, double Cg_min, double Cg_max,  double Cc_min, double Cc_max) {
     // NSGA-II のパラメータ
     const double pc    = 0.9;
     const double eta_c = 20.0;
@@ -178,7 +178,7 @@ void run_nsga2(int pop_size,int generations, double Lj, double Cg_min, double Cg
     const double pm    = 1.0/2.0;  // 2変数
     
     // 1. 初期集団
-    auto pop = init_population(pop_size, Lj, Cg_min, Cg_max, Cc_min, Cc_max);
+    auto pop = init_population(pop_size, ele, jl_source, Lj, Cg_min, Cg_max, Cc_min, Cc_max);
 
     // 2. 世代進化ループ
     for(int gen=0; gen<generations; ++gen) {
@@ -196,8 +196,8 @@ void run_nsga2(int pop_size,int generations, double Lj, double Cg_min, double Cg
             auto [c1, c2] = crossover(pop[i1], pop[i2], eta_c, pc);
             mutate(c1, eta_m, pm, Cg_min, Cg_max, Cc_min, Cc_max);
             mutate(c2, eta_m, pm, Cg_min, Cg_max, Cc_min, Cc_max);
-            if(evaluate(c1, Lj)) offspring.push_back(c1);
-            if((int)offspring.size() < pop_size && evaluate(c2, Lj))
+            if(evaluate(c1, Lj, ele, jl_source)) offspring.push_back(c1);
+            if((int)offspring.size() < pop_size && evaluate(c2, Lj, ele, jl_source))
                 offspring.push_back(c2);
         }
 
