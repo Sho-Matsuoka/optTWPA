@@ -23,8 +23,6 @@ int main(int argc, const char *argv[]) {
     read_jl(ele, jl_source);
     //write_jl(ele, jl_source);
     display_element(ele);
-    change_param(ele, "Lj", 2.5);
-    display_element(ele);
 
     //calculation(ele, jl_source);
     //run_nsga2(100, 100, ele, jl_source, value_param(ele, "Lj"), 0, 10, 0, 10);
