@@ -14,12 +14,11 @@
 using namespace std;
 
 
-vector<ele_unit> change_param(vector<ele_unit> ele, string ele_name, double value) {
+double change_param(vector<ele_unit> ele, string ele_name) {
 
     for(auto unit : ele){
         if(unit.name == ele_name){
-            unit.value = value;
+            return unit.value;
         }
     }
-    return ele;
 }

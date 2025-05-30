@@ -19,7 +19,7 @@ result calculation(vector<ele_unit> ele, vector<string> &jl_source) {
     write_jl(ele, jl_source);
     result result;
 
-    cout << "exuecuting Julia ..." << endl;
+    cout << " exuecuting Julia ..." << endl;
     execute_julia("TWPA_p.jl"); // julia を実行
 
     vector<vector<double>> csv_array = read_csv();
