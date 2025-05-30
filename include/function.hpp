@@ -45,7 +45,9 @@ double calc_gain(std::vector<std::vector<double>> csv_array, double freq_r);
 double calc_band(std::vector<std::vector<double>> csv_array, double gain);
 double calc_ripple(std::vector<std::vector<double>> csv_array, double freq_r);
 double calc_freq_r(std::vector<ele_unit> ele);
+std::vector<ele_unit> change_param(std::vector<ele_unit> ele, std::string ele_name, double value);
 
-ele_unit change_param(std::vector<std::string> &jl_source);
+//nsga2
+void run_nsga2(int pop_size,int generations, double Lj, double Cg_min, double Cg_max, double Cc_min, double Cc_max);
 
 #endif
