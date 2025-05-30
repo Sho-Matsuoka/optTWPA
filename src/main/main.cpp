@@ -23,9 +23,9 @@ int main(int argc, const char *argv[]) {
     read_jl(ele, jl_source);
     //write_jl(ele, jl_source);
     display_element(ele);
-
+    cout << value_param(ele, "Lj") << endl;
     //calculation(ele, jl_source);
-    //run_nsga2(100, 100, ele, jl_source, value_param(ele, "Lj"), 0, 10, 0, 10);
+    //run_nsga2(100, 100, ele, jl_source, value_param(ele, "Lj"), 1e-12, 1e-10, 1e-12, 1e-10);
 
     return 0;
 }
