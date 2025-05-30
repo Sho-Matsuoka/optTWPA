@@ -18,14 +18,13 @@ using namespace std;
 
 /* Josimの結果を配列に格納 */
 vector<vector<double>> read_csv() {
-    int i = 0;
     double out;
-    stringstream outfile;
+    stringstream outfile, delete_csv;
     stringstream outline;
     string line;
     vector<vector<double>> csv_array;
-    outfile << "freq_gain_sim" << ".csv";
-        
+    outfile << "freq_gain_" << getpid() << ".csv";
+    delete_csv << "rm -rf " << outfile.str();
     /* テキストファイルの読み込み */
     ifstream fp_csv(outfile.str());
 
@@ -59,6 +58,8 @@ vector<vector<double>> read_csv() {
         csv_array.emplace_back(column);
     }
     fp_csv.close();
+
+    system(delete_csv.str().c_str());
 
     return csv_array;
 }

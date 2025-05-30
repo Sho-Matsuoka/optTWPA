@@ -2,6 +2,7 @@
 #define FUNCTION_H
 
 constexpr double WIDTH_F = 1.5;
+constexpr double PHI_0 = 2.067833848e-15;
 
 #include <string>
 #include <vector>
@@ -47,8 +48,10 @@ double calc_ripple(std::vector<std::vector<double>> csv_array, double freq_r);
 double calc_freq_r(std::vector<ele_unit> ele);
 
 //parameter
-std::vector<ele_unit> change_param(std::vector<ele_unit> &ele, std::string ele_name, double value);
-double value_param(std::vector<ele_unit> ele, std::string ele_name);
+std::vector<ele_unit> change_param(std::vector<ele_unit> &ele, const std::string ele_name, double value);
+//double value_param(std::vector<ele_unit> &ele, const std::string ele_name);
+double out_value(std::vector<ele_unit> &ele, const std::string ele_name);
+double calc_Lj(double Lj);
 
 //nsga2
 void run_nsga2(int pop_size,int generations, std::vector<ele_unit> ele, std::vector<std::string> jl_source, double Lj, double Cg_min, double Cg_max, double Cc_min, double Cc_max);

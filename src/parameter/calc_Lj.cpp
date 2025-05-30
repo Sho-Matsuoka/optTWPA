@@ -14,13 +14,7 @@
 using namespace std;
 
 
-vector<ele_unit> change_param(vector<ele_unit> &ele, const string ele_name, double value) {
+double calc_Lj(double Lj) {
 
-    for (int i = 0; i < ele.size(); i++){
-        if(ele[i].name == ele_name){
-           ele[i].value = value;
-        }
-    }
-
-    return ele;
+    return PHI_0 / 2 / M_PI / Lj;
 }

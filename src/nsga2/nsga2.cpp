@@ -22,7 +22,7 @@ static std::mt19937_64 rng{std::random_device{}()};
 // 制約式から Cn を計算
 double compute_Cn(double Cg, double Cc, double Lj) {
     // √(3Lj/(2Cg+Cn+Cc))=49 → 2Cg+Cn+Cc = 3Lj/49^2
-    return (3.0 * Lj) / (49.0 * 49.0) - 2.0 * Cg - Cc;
+    return (3.0 * calc_Lj(Lj))/ (49.0 * 49.0) - 2.0 * Cg - Cc;
 }
 
 // 評価＆制約判定

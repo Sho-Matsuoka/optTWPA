@@ -22,10 +22,14 @@ int main(int argc, const char *argv[]) {
     //execute_julia("TWPA_src.jl"); // julia を実行
     read_jl(ele, jl_source);
     //write_jl(ele, jl_source);
-    display_element(ele);
-    cout << value_param(ele, "Lj") << endl;
+    //write_jl(ele, jl_source);
+    //change_param(ele, "Lj", 6.0e-6);
+    //display_element(ele);
+    //display_element(ele);
+
+    //cout << out_value(ele, "Lj") << endl;
     //calculation(ele, jl_source);
-    //run_nsga2(100, 100, ele, jl_source, value_param(ele, "Lj"), 1e-12, 1e-10, 1e-12, 1e-10);
+    run_nsga2(100, 200, ele, jl_source, out_value(ele, "Lj"), 1e-15, 1e-13, 1e-15, 1e-13);
 
     return 0;
 }
