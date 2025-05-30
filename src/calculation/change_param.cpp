@@ -14,11 +14,12 @@
 using namespace std;
 
 
-ele_unit change_param(vector<string> &jl_source) {
+vector<ele_unit> change_param(vector<ele_unit> ele, string ele_name, double value) {
 
-    ele_unit ele;
-
-
-
+    for(auto unit : ele){
+        if(unit.name == ele_name){
+            unit.value = value;
+        }
+    }
     return ele;
 }
