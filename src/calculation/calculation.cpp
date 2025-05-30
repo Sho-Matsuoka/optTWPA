@@ -1,3 +1,5 @@
+#include <stdio.h>
+#include <unistd.h>
 #include <iostream>
 #include <fstream>
 #include <vector>
@@ -15,12 +17,14 @@ using namespace std;
 
 
 result calculation(vector<ele_unit> ele, vector<string> &jl_source) {
+    stringstream jl_name, liness;
+    jl_name << "TWPA_" << getpid() << ".jl";
 
     write_jl(ele, jl_source);
     result result;
-
+    display_element(ele);
     cout << " exuecuting Julia ..." << endl;
-    execute_julia("TWPA_p.jl"); // julia を実行
+    execute_julia(jl_name.str()); // julia を実行
 
     vector<vector<double>> csv_array = read_csv();
 
@@ -31,7 +35,7 @@ result calculation(vector<ele_unit> ele, vector<string> &jl_source) {
     cout << " Gain     : " << result.gain << " dB" << endl;
     cout << " Bandwidth: " << result.bandwidth<< " GHz" << endl;
     cout << " Ripple   : " << result.ripple << " dB" << endl;
-    cout << " freq_r   : " << calc_freq_r(ele) << " GHz" << endl;
+    cout << " freq_r   : " << calc_freq_r(ele) << " GHz" << endl << endl;
 
     return result;
 }

@@ -14,13 +14,14 @@
 using namespace std;
 
 
-vector<ele_unit> change_param(vector<ele_unit> &ele, const string ele_name, double value) {
+double out_value(vector<ele_unit> &ele, const string ele_name) {
 
+    double e;
     for (int i = 0; i < ele.size(); i++){
         if(ele[i].name == ele_name){
-           ele[i].value = value;
+            e = ele[i].value;
         }
     }
 
-    return ele;
+    return e;
 }
