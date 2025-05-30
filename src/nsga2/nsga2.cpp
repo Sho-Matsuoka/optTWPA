@@ -48,7 +48,7 @@ bool evaluate(Individual &ind, double Lj, std::vector<ele_unit> ele, std::vector
 }
 
 // 非優越ソート
-std::vector<std::vector<int>> fast_nondominated_sort(const std::vector<Individual>& pop) {
+std::vector<std::vector<int>> fast_nondominated_sort(std::vector<Individual>& pop) {
     int N = pop.size();
     std::vector<int> dom_count(N,0);
     std::vector<std::vector<int>> dominated(N);
