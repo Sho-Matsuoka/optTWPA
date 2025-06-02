@@ -36,6 +36,8 @@ result calculation(vector<ele_unit> ele, vector<string> &jl_source) {
     cout << " Bandwidth: " << result.bandwidth<< " GHz" << endl;
     cout << " Ripple   : " << result.ripple << " dB" << endl;
     cout << " freq_r   : " << calc_freq_r(ele) << " GHz" << endl << endl;
+    cout << " impedance: " << calc_imp(ele) << " ohm" << endl << endl;
+
 
     return result;
 }

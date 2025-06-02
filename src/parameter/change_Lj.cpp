@@ -14,7 +14,7 @@
 using namespace std;
 
 
-double calc_Lj(double Lj) {
+double change_Lj(double Lj) {
 
     return PHI_0 / 2 / M_PI / Lj;
 }
