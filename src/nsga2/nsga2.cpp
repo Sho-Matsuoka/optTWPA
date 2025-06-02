@@ -22,7 +22,7 @@ static std::mt19937_64 rng{std::random_device{}()};
 // 制約式から Cn を計算
 double compute_Cn(double Cg, double Cc, double Lj) {
     // √(3Lj/(2Cg+Cn+Cc))=49 → 2Cg+Cn+Cc = 3Lj/49^2
-    return (3.0 * calc_Lj(Lj))/ (49.0 * 49.0) - 2.0 * Cg - Cc;
+    return (3.0 * change_Lj(Lj))/ (49.0 * 49.0) - 2.0 * Cg - Cc;
 }
 
 // 評価＆制約判定
@@ -159,11 +159,14 @@ std::vector<Individual> init_population(int pop_size, std::vector<ele_unit> ele,
     std::uniform_real_distribution<> dCc(Cc_min, Cc_max);
     std::vector<Individual> pop;
     pop.reserve(pop_size);
+    int i = 1;
     while(pop.size() < (size_t)pop_size) {
         Individual ind;
         ind.x0 = dCg(rng);
         ind.x1 = dCc(rng);
         if(evaluate(ind, Lj, ele, jl_source)) pop.push_back(ind);
+        std::cout << " This is the " << i << "th trial" << std::endl;
+        i++;
     }
     return pop;
 }
