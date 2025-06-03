@@ -16,7 +16,7 @@
 using namespace std;
 
 
-result calculation(vector<ele_unit> ele, vector<string> &jl_source) {
+result calculation(const vector<ele_unit> &ele, const vector<string> &jl_source) {
     stringstream jl_name, liness;
     jl_name << "TWPA_" << getpid() << ".jl";
 
