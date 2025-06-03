@@ -1,6 +1,6 @@
 # コンパイラとフラグ
 CXX = g++
-CXXFLAGS = -Wall -Iinclude -std=c++17 
+CXXFLAGS = -Wall -Iinclude -std=c++17 -I/usr/include/eigen3
 
 # フォルダ構成
 SRC_DIR = src
