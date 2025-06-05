@@ -4,6 +4,9 @@
 #include <string>
 #include <iostream>
 
+#include <utility>
+
+
 #if __has_include(<pagmo/pagmo.hpp>)
 #include <pagmo/pagmo.hpp>
 #include <pagmo/algorithms/nsga2.hpp>
@@ -17,6 +20,14 @@
 #if PAGMO_AVAILABLE
 
 using pagmo::vector_double;
+using pagmo::problem;
+using pagmo::algorithm;
+using pagmo::population;
+using pagmo::nsga2;
+
+
+using pagmo::vector_double;
+
 
 
 namespace {
@@ -60,6 +71,10 @@ struct josephson_problem_codex {
 
 
     std::string get_name() const { return "josephson_problem_codex"; }
+
+
+    std::string get_name() const { return "josephson_problem_codex"; }
+
 
 
     void set_bounds(double cgmin, double cgmax, double ccmin, double ccmax) {
