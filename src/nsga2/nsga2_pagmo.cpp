@@ -9,7 +9,23 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
-namespace {
+
+#if defined(__has_include)
+#  if __has_include(<pagmo/pagmo.hpp>)
+#    include <pagmo/pagmo.hpp>
+#    include <pagmo/algorithms/nsga2.hpp>
+#    include <pagmo/population.hpp>
+#    include <pagmo/types.hpp>
+#    define PAGMO_AVAILABLE 1
+#  else
+#    pragma message("pagmo library not found, run_nsga2_pagmo will be disabled")
+#    define PAGMO_AVAILABLE 0
+#  endif
+#else
+#  pragma message("__has_include unavailable, pagmo optional support disabled")
+#  define PAGMO_AVAILABLE 0
+#endif
+
 
 struct Individual {
     double x0, x1;   // Cg, Cc

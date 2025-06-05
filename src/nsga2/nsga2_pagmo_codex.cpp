@@ -3,7 +3,6 @@
 #include <vector>
 #include <string>
 #include <iostream>
-
 #include <utility>
 
 
@@ -35,6 +34,7 @@ struct josephson_problem_codex {
 
     josephson_problem_codex() = default;
 
+
     josephson_problem_codex(double Lj_, const std::vector<ele_unit>& e,
                             const std::vector<std::string>& jl)
         : Lj(Lj_), ele(e), jl_source(jl) {}
@@ -65,7 +65,6 @@ struct josephson_problem_codex {
     std::size_t get_nobj() const { return 2u; }
 
     std::string get_name() const { return "josephson_problem_codex"; }
-
 
     void set_bounds(double cgmin, double cgmax, double ccmin, double ccmax) {
         Cg_min = cgmin; Cg_max = cgmax;
