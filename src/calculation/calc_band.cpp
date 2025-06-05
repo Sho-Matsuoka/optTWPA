@@ -20,7 +20,7 @@ double calc_band(vector<vector<double>> csv_array, double gain) {
     double freq_l = 0, freq_h = 0;
     double bandwidth = 0;
 
-    for (int i = 0; i < csv_array.size() - 1; i++) {
+    for (size_t i = 0; i + 1 < csv_array.size(); ++i) {
         if(csv_array[i][1] <= gain_half){
             if(csv_array[i + 1][1] >= gain_half){
                 freq_l = (csv_array[i][0] + csv_array[i + 1][0]) / 2;
@@ -29,10 +29,11 @@ double calc_band(vector<vector<double>> csv_array, double gain) {
         }
     }
 
-    for (int i = csv_array.size() - 1; i >= 0; i--) {
-        if(csv_array[i][1] <= gain_half){
-            if(csv_array[i - 1][1] >= gain_half){
-                freq_h = (csv_array[i][0] + csv_array[i - 1][0]) / 2;
+    for (size_t i = csv_array.size(); i > 1; --i) {
+        size_t idx = i - 1;
+        if(csv_array[idx][1] <= gain_half){
+            if(csv_array[idx - 1][1] >= gain_half){
+                freq_h = (csv_array[idx][0] + csv_array[idx - 1][0]) / 2;
                 break;
             }
         }
