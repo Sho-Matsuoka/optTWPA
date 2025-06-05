@@ -3,7 +3,9 @@
 #include <vector>
 #include <string>
 #include <iostream>
+
 #include <utility>
+
 
 #if __has_include(<pagmo/pagmo.hpp>)
 #include <pagmo/pagmo.hpp>
@@ -16,11 +18,18 @@
 #endif
 
 #if PAGMO_AVAILABLE
+
 using pagmo::vector_double;
 using pagmo::problem;
 using pagmo::algorithm;
 using pagmo::population;
 using pagmo::nsga2;
+
+
+using pagmo::vector_double;
+
+
+
 namespace {
     static std::mt19937_64 rng{std::random_device{}()};
 }
@@ -60,7 +69,13 @@ struct josephson_problem_codex {
 
     std::size_t get_nobj() const { return 2u; }
 
+
     std::string get_name() const { return "josephson_problem_codex"; }
+
+
+    std::string get_name() const { return "josephson_problem_codex"; }
+
+
 
     void set_bounds(double cgmin, double cgmax, double ccmin, double ccmax) {
         Cg_min = cgmin; Cg_max = cgmax;

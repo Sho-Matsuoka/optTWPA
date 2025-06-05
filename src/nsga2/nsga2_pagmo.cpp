@@ -20,10 +20,12 @@
 
 #if PAGMO_AVAILABLE
 using pagmo::vector_double;
+
 using pagmo::problem;
 using pagmo::algorithm;
 using pagmo::population;
 using pagmo::nsga2;
+
 
 //======================================
 // UDP: JosephsonCircuits を呼び出して (gain, bandwidth, ripple) を得る
