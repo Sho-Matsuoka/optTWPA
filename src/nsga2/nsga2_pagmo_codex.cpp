@@ -16,7 +16,10 @@
 #endif
 
 #if PAGMO_AVAILABLE
+
 using namespace pagmo;
+
+
 namespace {
     static std::mt19937_64 rng{std::random_device{}()};
 }
@@ -27,7 +30,11 @@ struct josephson_problem_codex {
     std::vector<std::string> jl_source;
     double Cg_min, Cg_max, Cc_min, Cc_max;
 
+
     josephson_problem_codex() = default;
+
+
+
     josephson_problem_codex(double Lj_, const std::vector<ele_unit>& e,
                             const std::vector<std::string>& jl)
         : Lj(Lj_), ele(e), jl_source(jl) {}
