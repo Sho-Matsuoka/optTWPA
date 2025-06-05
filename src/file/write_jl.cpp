@@ -14,7 +14,7 @@
 
 using namespace std;
 
-void write_jl(vector<ele_unit> &ele, vector<string> &jl_source){ //for writing .jl file of new parameters
+void write_jl(const vector<ele_unit> &ele, const vector<string> &jl_source){ //for writing .jl file of new parameters
     stringstream jl_name, liness, csv_line;
     jl_name << "TWPA_" << getpid() << ".jl";
     csv_line << "    open(\"freq_gain_" <<  getpid() << ".csv\", \"w\") do io";
