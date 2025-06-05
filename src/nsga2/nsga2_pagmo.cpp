@@ -35,6 +35,7 @@ struct josephson_problem {
     std::vector<ele_unit> ele;
     std::vector<std::string> jl_source;
 
+    josephson_problem() = default;
     josephson_problem(double Lj_, const std::vector<ele_unit>& ele_,
                       const std::vector<std::string>& jl_src_)
         : Lj(Lj_), ele(ele_), jl_source(jl_src_) {}
