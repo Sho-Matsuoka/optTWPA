@@ -1,6 +1,7 @@
 # コンパイラとフラグ
 CXX = g++
 CXXFLAGS = -Wall -Iinclude -std=c++17 -I/usr/include/eigen3
+LDFLAGS = -L/usr/local/lib -lpagmo
 
 # フォルダ構成
 SRC_DIR = src
@@ -17,13 +18,13 @@ TARGET = optTWPA
 # デフォルトのターゲット
 all: $(TARGET)
 
-# 実行ファイルの作成
+# 実行ファイルの作成（リンク）
 $(TARGET): $(OBJ_FILES)
-	$(CXX) $(CXXFLAGS) -o $(TARGET) $(OBJ_FILES)
+	$(CXX) $(OBJ_FILES) -o $(TARGET) $(LDFLAGS)
 
 # 各オブジェクトファイルのビルド
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.cpp
-	@mkdir -p $(dir $@)  # オブジェクトファイル用のディレクトリを作成
+	@mkdir -p $(dir $@)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 # クリーンアップ
