@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <cmath>
 #include <iostream>
+#include <utility>
 
 #if __has_include(<pagmo/pagmo.hpp>)
 #include <pagmo/pagmo.hpp>
@@ -28,11 +29,12 @@ struct josephson_problem {
     std::vector<ele_unit> ele;
     std::vector<std::string> jl_source;
 
+    josephson_problem() = default;
     josephson_problem(double Lj_, const std::vector<ele_unit>& ele_,
                       const std::vector<std::string>& jl_src_)
         : Lj(Lj_), ele(ele_), jl_source(jl_src_) {}
 
-    pagmo::vector_double fitness(const pagmo::vector_double &x) const {
+    vector_double fitness(const vector_double &x) const {
         const double Cg = x[0];
         const double Cc = x[1];
         const double denom = 3.0 * Lj / (49.0 * 49.0);
@@ -58,7 +60,7 @@ struct josephson_problem {
         return {f1, f2, c1, c2};
     }
 
-    std::pair<pagmo::vector_double, pagmo::vector_double> get_bounds() const {
+    std::pair<vector_double, vector_double> get_bounds() const {
         return {{Cg_min, Cc_min}, {Cg_max, Cc_max}};
     }
 
@@ -72,6 +74,8 @@ struct josephson_problem {
         Cg_min = _Cg_min;  Cg_max = _Cg_max;
         Cc_min = _Cc_min;  Cc_max = _Cc_max;
     }
+
+    std::string get_name() const { return "josephson_problem"; }
 };
 
 //======================================
