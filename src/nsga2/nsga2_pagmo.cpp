@@ -34,36 +34,35 @@ struct josephson_problem {
     double Lj;
     std::vector<ele_unit> ele;
     std::vector<std::string> jl_source;
+    double Cg_min, Cg_max, Cc_min, Cc_max;
 
     josephson_problem() = default;
     josephson_problem(double Lj_, const std::vector<ele_unit>& ele_,
                       const std::vector<std::string>& jl_src_)
         : Lj(Lj_), ele(ele_), jl_source(jl_src_) {}
 
-    vector_double fitness(const vector_double &x) const {
-        const double Cg = x[0];
-        const double Cc = x[1];
-        const double denom = 3.0 * Lj / (49.0 * 49.0);
-        const double Cn = denom - 2.0 * Cg - Cc;
-
-        double gain = 0.0, bw = 0.0, ripple = 0.0;
-        if (Cn > 0.0) {
-            change_param(const_cast<std::vector<ele_unit>&>(ele), "Cg", Cg);
-            change_param(const_cast<std::vector<ele_unit>&>(ele), "Cc", Cc);
-            change_param(const_cast<std::vector<ele_unit>&>(ele), "Cn", Cn);
-            result r = calculation(ele, jl_source);
-            gain   = r.gain;
-            bw     = r.bandwidth;
-            ripple = r.ripple;
-        } else {
-            ripple = 1.0;
+    result eval(double Cg, double Cc) const {
+        auto tmp = ele;
+        change_param(tmp, "Cg", Cg);
+        change_param(tmp, "Cc", Cc);
+        double denom = 3.0 * Lj / (49.0 * 49.0);
+        double Cn = denom - 2.0 * Cg - Cc;
+        if (Cn <= 0.0) {
+            return {0.0, 0.0, 1.0};
         }
+        change_param(tmp, "Cn", Cn);
+        return calculation(tmp, jl_source);
+    }
 
-        double f1 = -gain;
-        double f2 = -bw;
-        double c1 = ripple - 0.1;
-        double c2 = -Cn;
-        return {f1, f2, c1, c2};
+    vector_double fitness(const vector_double &x) const {
+        result r = eval(x[0], x[1]);
+        double f1 = -r.gain;
+        double f2 = -r.bandwidth;
+        if (r.ripple > 0.1) {
+            f1 = 1e6 + r.ripple;
+            f2 = 1e6 + r.ripple;
+        }
+        return {f1, f2};
     }
 
     std::pair<vector_double, vector_double> get_bounds() const {
@@ -71,10 +70,9 @@ struct josephson_problem {
     }
 
     std::size_t get_nobj() const { return 2u; }
-    std::size_t get_nic() const { return 2u; }
+    std::size_t get_nic() const { return 0u; }
     std::size_t get_nec() const { return 0u; }
 
-    double Cg_min, Cg_max, Cc_min, Cc_max;
     void set_bounds(double _Cg_min, double _Cg_max,
                     double _Cc_min, double _Cc_max) {
         Cg_min = _Cg_min;  Cg_max = _Cg_max;
@@ -110,26 +108,21 @@ void run_nsga2_pagmo(int pop_size,
     pagmo::population pop{prob, static_cast<unsigned int>(pop_size)};
     pop = algo.evolve(pop);
 
-    const auto all_f = pop.get_f();
     std::cout << "# Cg\tCc\tCn\tgain\tbandwidth\tripple\n";
-    for (std::size_t i = 0; i < all_f.size(); ++i) {
-        double f1 = all_f[i][0], f2 = all_f[i][1];
-        double c1 = all_f[i][2], c2 = all_f[i][3];
-        if (c1 <= 0.0 && c2 <= 0.0) {
-            const auto xv = pop.get_x()[i];
-            double Cg = xv[0];
-            double Cc = xv[1];
-            double denom = 3.0 * Lj / (49.0 * 49.0);
-            double Cn = denom - 2.0 * Cg - Cc;
-            double gain      = -f1;
-            double bandwidth = -f2;
-            double ripple    = c1 + 0.1;
+    for (std::size_t i = 0; i < pop.size(); ++i) {
+        const auto xv = pop.get_x()[i];
+        double Cg = xv[0];
+        double Cc = xv[1];
+        result r = prob_udp.eval(Cg, Cc);
+        double denom = 3.0 * Lj / (49.0 * 49.0);
+        double Cn = denom - 2.0 * Cg - Cc;
+        if (r.ripple <= 0.1 && Cn > 0.0) {
             std::cout << Cg << "\t"
                       << Cc << "\t"
                       << Cn << "\t"
-                      << gain << "\t"
-                      << bandwidth << "\t"
-                      << ripple << "\n";
+                      << r.gain << "\t"
+                      << r.bandwidth << "\t"
+                      << r.ripple << "\n";
         }
     }
 }
