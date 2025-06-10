@@ -120,12 +120,10 @@ void run_nsga2_pagmo_par(int pop_size,
     std::size_t finished = 0;
     std::cerr << "\rProgress: 0/" << pop.size() << std::flush;
 
-
     for (std::size_t i = 0; i < pop.size(); ++i) {
-        if (active >= max_proc) {
+        while (active >= max_proc) {
             wait(nullptr);
             --active;
-
             ++finished;
             std::cerr << "\rProgress: " << finished << "/" << pop.size() << std::flush;
 
@@ -175,7 +173,6 @@ void run_nsga2_pagmo_par(int pop_size,
     while (active > 0) {
         wait(nullptr);
         --active;
-
         ++finished;
         std::cerr << "\rProgress: " << finished << "/" << pop.size() << std::flush;
     }
