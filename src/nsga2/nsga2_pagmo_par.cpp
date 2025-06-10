@@ -116,15 +116,19 @@ void run_nsga2_pagmo_par(int pop_size,
     unsigned int max_proc = std::thread::hardware_concurrency();
     if (max_proc == 0) max_proc = 2;
     unsigned int active = 0;
+
     std::size_t finished = 0;
     std::cerr << "\rProgress: 0/" << pop.size() << std::flush;
+
 
     for (std::size_t i = 0; i < pop.size(); ++i) {
         if (active >= max_proc) {
             wait(nullptr);
             --active;
+
             ++finished;
             std::cerr << "\rProgress: " << finished << "/" << pop.size() << std::flush;
+
         }
         pid_t pid = fork();
         if (pid == 0) {
@@ -161,18 +165,24 @@ void run_nsga2_pagmo_par(int pop_size,
                           << r.bandwidth << "\t"
                           << r.ripple << "\n";
             }
+
             ++finished;
             std::cerr << "\rProgress: " << finished << "/" << pop.size() << std::flush;
+
         }
     }
 
     while (active > 0) {
         wait(nullptr);
         --active;
+
         ++finished;
         std::cerr << "\rProgress: " << finished << "/" << pop.size() << std::flush;
     }
     std::cerr << std::endl;
+
+    }
+
 }
 #else
 void run_nsga2_pagmo_par(int pop_size,
