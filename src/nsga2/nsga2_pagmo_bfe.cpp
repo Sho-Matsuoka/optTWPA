@@ -8,6 +8,9 @@
 #include <utility>
 #include <thread>
 
+#include <functional>
+
+
 #if __has_include(<pagmo/pagmo.hpp>)
 #include <pagmo/pagmo.hpp>
 #include <pagmo/algorithms/nsga2.hpp>
@@ -54,7 +57,10 @@ struct josephson_problem {
             return {0.0, 0.0, 1.0};
         }
         change_param(tmp, "Cn", Cn);
-        return calculation(tmp, jl_source);
+
+        auto tid = std::hash<std::thread::id>{}(std::this_thread::get_id());
+        return calculation(tmp, jl_source, tid);
+
     }
 
     vector_double fitness(const vector_double &x) const {
