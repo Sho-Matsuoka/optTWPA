@@ -16,17 +16,19 @@
 using namespace std;
 
 
-result calculation(const vector<ele_unit> &ele, const vector<string> &jl_source) {
+result calculation(const vector<ele_unit> &ele, const vector<string> &jl_source, std::size_t tid) {
     stringstream jl_name, liness;
-    jl_name << "TWPA_" << getpid() << ".jl";
+    jl_name << "TWPA_" << getpid();
+    if(tid != 0) jl_name << '_' << tid;
+    jl_name << ".jl";
 
-    write_jl(ele, jl_source);
+    write_jl(ele, jl_source, tid);
     result result;
     display_element(ele);
     cout << " exuecuting Julia ..." << endl;
     execute_julia(jl_name.str()); // julia を実行
 
-    vector<vector<double>> csv_array = read_csv();
+    vector<vector<double>> csv_array = read_csv(tid);
 
     result.gain = calc_gain(csv_array, calc_freq_r(ele));
     result.bandwidth = calc_band(csv_array, result.gain);
