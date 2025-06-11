@@ -7,7 +7,9 @@
 #include <iostream>
 #include <utility>
 #include <thread>
+
 #include <functional>
+
 
 #if __has_include(<pagmo/pagmo.hpp>)
 #include <pagmo/pagmo.hpp>
@@ -15,6 +17,7 @@
 #include <pagmo/population.hpp>
 #include <pagmo/types.hpp>
 #include <pagmo/batch_evaluators/thread_bfe.hpp>
+
 #define PAGMO_AVAILABLE 1
 #else
 #pragma message("pagmo library not found, run_nsga2_pagmo_bfe will be disabled")
@@ -54,8 +57,10 @@ struct josephson_problem {
             return {0.0, 0.0, 1.0};
         }
         change_param(tmp, "Cn", Cn);
+
         auto tid = std::hash<std::thread::id>{}(std::this_thread::get_id());
         return calculation(tmp, jl_source, tid);
+
     }
 
     vector_double fitness(const vector_double &x) const {
@@ -109,10 +114,12 @@ void run_nsga2_pagmo_bfe(int pop_size,
         20.0
     ) };
 
+
     pagmo::thread_bfe bfe{};
 
     pagmo::population pop{prob, bfe, static_cast<unsigned int>(pop_size)};
     pop = algo.evolve(pop);
+
 
     std::cout << "# Cg\tCc\tCn\tgain\tbandwidth\tripple\n";
     for (std::size_t i = 0; i < pop.size(); ++i) {
