@@ -7,9 +7,11 @@
 #include <iostream>
 #include <utility>
 #include <thread>
+#include <atomic>
 
-#include <functional>
-
+        static std::atomic<std::size_t> eval_counter{0};
+        auto eval_id = eval_counter.fetch_add(1, std::memory_order_relaxed);
+        return calculation(tmp, jl_source, eval_id);
 
 #if __has_include(<pagmo/pagmo.hpp>)
 #include <pagmo/pagmo.hpp>
