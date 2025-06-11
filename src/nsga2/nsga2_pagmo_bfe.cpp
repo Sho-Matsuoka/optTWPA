@@ -13,7 +13,8 @@
 #include <pagmo/algorithms/nsga2.hpp>
 #include <pagmo/population.hpp>
 #include <pagmo/types.hpp>
-#include <pagmo/thread_bfe.hpp>
+#include <pagmo/batch_evaluators/thread_bfe.hpp>
+
 #define PAGMO_AVAILABLE 1
 #else
 #pragma message("pagmo library not found, run_nsga2_pagmo_bfe will be disabled")
@@ -107,12 +108,12 @@ void run_nsga2_pagmo_bfe(int pop_size,
         20.0
     ) };
 
-    std::size_t th = std::thread::hardware_concurrency();
-    if (th == 0) th = 2;
-    pagmo::thread_bfe bfe(th);
 
-    pagmo::population pop{prob, static_cast<unsigned int>(pop_size), bfe};
-    pop = algo.evolve(pop, bfe);
+    pagmo::thread_bfe bfe{};
+
+    pagmo::population pop{prob, bfe, static_cast<unsigned int>(pop_size)};
+    pop = algo.evolve(pop);
+
 
     std::cout << "# Cg\tCc\tCn\tgain\tbandwidth\tripple\n";
     for (std::size_t i = 0; i < pop.size(); ++i) {
