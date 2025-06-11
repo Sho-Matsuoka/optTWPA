@@ -17,13 +17,15 @@ using namespace std;
 
 
 /* Josimの結果を配列に格納 */
-vector<vector<double>> read_csv() {
+vector<vector<double>> read_csv(std::size_t tid) {
     double out;
     stringstream outfile, delete_csv;
     stringstream outline;
     string line;
     vector<vector<double>> csv_array;
-    outfile << "freq_gain_" << getpid() << ".csv";
+    outfile << "freq_gain_" << getpid();
+    if(tid != 0) outfile << '_' << tid;
+    outfile << ".csv";
     delete_csv << "rm -rf " << outfile.str();
     /* テキストファイルの読み込み */
     ifstream fp_csv(outfile.str());
