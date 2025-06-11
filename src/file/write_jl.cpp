@@ -14,10 +14,14 @@
 
 using namespace std;
 
-void write_jl(const vector<ele_unit> &ele, const vector<string> &jl_source){ //for writing .jl file of new parameters
+void write_jl(const vector<ele_unit> &ele, const vector<string> &jl_source, std::size_t tid){ //for writing .jl file of new parameters
     stringstream jl_name, liness, csv_line;
-    jl_name << "TWPA_" << getpid() << ".jl";
-    csv_line << "    open(\"freq_gain_" <<  getpid() << ".csv\", \"w\") do io";
+    jl_name << "TWPA_" << getpid();
+    if(tid != 0) jl_name << '_' << tid;
+    jl_name << ".jl";
+    csv_line << "    open(\"freq_gain_" <<  getpid();
+    if(tid != 0) csv_line << '_' << tid;
+    csv_line << ".csv\", \"w\") do io";
     ofstream fpin(jl_name.str());
     int y = 0;
     vector<string> jl_source_copy = jl_source;
