@@ -52,7 +52,7 @@ struct josephson_problem {
         auto tmp = ele;
         change_param(tmp, "Cg", Cg);
         change_param(tmp, "Cc", Cc);
-        double denom = 3.0 * Lj / (49.0 * 49.0);
+        double denom = 3.0 * change_Lj(Lj) / (49.0 * 49.0);
         double Cn = denom - 2.0 * Cg - Cc;
         if (Cn <= 0.0) {
             return {0.0, 0.0, 1.0};

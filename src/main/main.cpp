@@ -29,8 +29,8 @@ int main(int argc, const char *argv[]) {
 
     //cout << out_value(ele, "Lj") << endl;
     //calculation(ele, jl_source);
-    run_nsga2_pagmo(100, 200, ele, jl_source, out_value(ele, "Lj"), 1e-15, 1e-13, 1e-15, 1e-13);
-    run_nsga2_pagmo_codex(100, 200, ele, jl_source, out_value(ele, "Lj"), 1e-15, 1e-13, 1e-15, 1e-13);
+    run_nsga2_pagmo_bfe(100, 200, ele, jl_source, out_value(ele, "Lj"), 1e-15, 1e-13, 1e-15, 1e-13);
+    //run_nsga2_pagmo_codex(100, 200, ele, jl_source, out_value(ele, "Lj"), 1e-15, 1e-13, 1e-15, 1e-13);
 
     return 0;
 }
