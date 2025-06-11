@@ -9,6 +9,7 @@
 #include <thread>
 
 #include <functional>
+#include <atomic>
 
 
 #if __has_include(<pagmo/pagmo.hpp>)
@@ -58,8 +59,9 @@ struct josephson_problem {
         }
         change_param(tmp, "Cn", Cn);
 
-        auto tid = std::hash<std::thread::id>{}(std::this_thread::get_id());
-        return calculation(tmp, jl_source, tid);
+        static std::atomic<std::size_t> eval_counter{0};
+        auto eval_id = eval_counter.fetch_add(1, std::memory_order_relaxed);
+        return calculation(tmp, jl_source, eval_id);
 
     }
 
