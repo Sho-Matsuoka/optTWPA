@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <cmath>
 #include <iostream>
+#include <fstream>
 #include <utility>
 #include <thread>
 #include <unistd.h>
@@ -176,6 +177,26 @@ void run_nsga2_pagmo_par(int pop_size,
         std::cerr << "\rProgress: " << finished << "/" << pop.size() << std::flush;
     }
     std::cerr << std::endl;
+
+    std::ofstream ofs("nsga2_result.csv");
+    ofs << "Cg,Cc,Cn,gain,bandwidth,ripple\n";
+    for (std::size_t i = 0; i < pop.size(); ++i) {
+        const auto xv = pop.get_x()[i];
+        double Cg = xv[0];
+        double Cc = xv[1];
+        result r = prob_udp.eval(Cg, Cc);
+        double denom = 3.0 * Lj / (49.0 * 49.0);
+        double Cn = denom - 2.0 * Cg - Cc;
+        if (r.ripple <= 0.1 && Cn > 0.0) {
+            ofs << Cg << ','
+                << Cc << ','
+                << Cn << ','
+                << r.gain << ','
+                << r.bandwidth << ','
+                << r.ripple << '\n';
+        }
+    }
+    ofs.close();
 
     
 
