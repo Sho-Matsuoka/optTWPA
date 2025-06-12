@@ -6,6 +6,7 @@
 #include <cmath>
 #include <iostream>
 #include <utility>
+#include <fstream>
 
 #if __has_include(<pagmo/pagmo.hpp>)
 #include <pagmo/pagmo.hpp>
