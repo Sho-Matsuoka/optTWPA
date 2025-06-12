@@ -110,16 +110,20 @@ void run_nsga2_pagmo_island(int pop_size,
 
     archipelago archi;
 
-    std::vector<std::future<population>> init_futs;
+    std::vector<std::future<island>> init_futs;
     init_futs.reserve(pop_size);
     for (int i = 0; i < pop_size; ++i) {
-        init_futs.emplace_back(std::async(std::launch::async, [prob]() {
-            return population{prob, 1u};
+        init_futs.emplace_back(std::async(std::launch::async, [algo, prob]() {
+            population pop{prob, 1u};
+            return island{algo, std::move(pop)};
+
         }));
     }
 
     for (auto &fut : init_futs) {
-        archi.push_back(island{algo, fut.get()});
+
+        archi.push_back(fut.get());
+
     }
 
     archi.evolve();
