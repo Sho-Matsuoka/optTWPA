@@ -115,6 +115,7 @@ void run_nsga2_pagmo_island(int pop_size,
     for (int i = 0; i < pop_size; ++i) {
         pops.emplace_back(prob, 1u);
 
+    }
 
     for (int i = 0; i < pop_size; ++i) {
         archi.push_back(island{algo, std::move(pops[i])});
