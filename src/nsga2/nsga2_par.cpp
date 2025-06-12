@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <cmath>
 #include <iostream>
+#include <fstream>
 #include <sys/wait.h>
 #include <unistd.h>
 #include <thread>
@@ -331,14 +332,25 @@ void run_nsga2(int pop_size,int generations, std::vector<ele_unit> ele, std::vec
 
     // 結果出力：Pareto front
     auto final_fronts = fast_nondominated_sort(pop);
+    std::ofstream ofs("nsga2_result.csv");
+    ofs << "Cg,Cc,Cn,gain,bandwidth,ripple\n";
     for(int idx : final_fronts[0]){
         double Cg = pop[idx].x0;
         double Cc = pop[idx].x1;
         double Cn = compute_Cn(Cg,Cc,Lj);
+        double gain = -pop[idx].f1;
+        double bw   = -pop[idx].f2;
         std::cout << Cg << "\t" << Cc << "\t" << Cn
-                  << "\t" << -pop[idx].f1  // gain
-                  << "\t" << -pop[idx].f2  // bandwidth
+                  << "\t" << gain  // gain
+                  << "\t" << bw    // bandwidth
                   << "\t" << pop[idx].ripple
                   << "\n";
+        ofs << Cg << ','
+            << Cc << ','
+            << Cn << ','
+            << gain << ','
+            << bw << ','
+            << pop[idx].ripple << '\n';
     }
+    ofs.close();
 }
