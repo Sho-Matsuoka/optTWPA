@@ -6,7 +6,9 @@
 #include <cmath>
 #include <iostream>
 #include <utility>
+
 #include <future>
+
 
 #if __has_include(<pagmo/pagmo.hpp>)
 #include <pagmo/pagmo.hpp>
@@ -88,7 +90,9 @@ struct josephson_problem {
 //======================================
 // run_nsga2_pagmp_island ：Pagmo Island Model を使った NSGA‐II 実行
 //======================================
-void run_nsga2_pagmp_island(int pop_size,
+
+void run_nsga2_pagmo_island(int pop_size,
+
                             int generations,
                             const std::vector<ele_unit>& ele,
                             const std::vector<std::string>& jl_source,
@@ -110,6 +114,7 @@ void run_nsga2_pagmp_island(int pop_size,
 
     archipelago archi;
 
+
     std::vector<std::future<population>> init_futs;
     init_futs.reserve(pop_size);
     for (int i = 0; i < pop_size; ++i) {
@@ -120,14 +125,17 @@ void run_nsga2_pagmp_island(int pop_size,
 
     for (auto &fut : init_futs) {
         archi.push_back(island{algo, fut.get()});
+
     }
 
     archi.evolve();
     archi.wait();
 
     std::cout << "# Cg\tCc\tCn\tgain\tbandwidth\tripple\n";
+
     for (auto &isl : archi) {
         const auto &pop = isl.get_population();
+
         const auto xv = pop.get_x()[0];
         double Cg = xv[0];
         double Cc = xv[1];
@@ -145,7 +153,8 @@ void run_nsga2_pagmp_island(int pop_size,
     }
 }
 #else
-void run_nsga2_pagmp_island(int pop_size,
+
+void run_nsga2_pagmo_island(int pop_size,
                             int generations,
                             const std::vector<ele_unit>& ele,
                             const std::vector<std::string>& jl_source,
