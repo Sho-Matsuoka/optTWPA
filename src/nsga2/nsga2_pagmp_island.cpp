@@ -117,8 +117,10 @@ void run_nsga2_pagmp_island(int pop_size,
     archi.wait();
 
     std::cout << "# Cg\tCc\tCn\tgain\tbandwidth\tripple\n";
-    for (std::size_t i = 0; i < archi.size(); ++i) {
-        const auto &pop = archi.get_island(i).get_population();
+
+    for (auto &isl : archi) {
+        const auto &pop = isl.get_population();
+
         const auto xv = pop.get_x()[0];
         double Cg = xv[0];
         double Cc = xv[1];
