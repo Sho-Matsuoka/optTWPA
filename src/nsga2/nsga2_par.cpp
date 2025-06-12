@@ -214,8 +214,7 @@ std::vector<Individual> init_population(int pop_size, std::vector<ele_unit> ele,
     std::uniform_real_distribution<> dCc(Cc_min, Cc_max);
     std::vector<Individual> pop;
     pop.reserve(pop_size);
-    unsigned int max_proc = std::thread::hardware_concurrency();
-    if (max_proc == 0) max_proc = 2;
+    unsigned int max_proc = static_cast<unsigned int>(pop_size);
     std::vector<ProcInfo> running;
     int trial = 1;
     while(pop.size() < (size_t)pop_size) {
@@ -268,8 +267,7 @@ void run_nsga2_par(int pop_size,int generations, std::vector<ele_unit> ele, std:
         // オフスプリング生成
         std::vector<Individual> offspring;
         offspring.reserve(pop_size);
-        unsigned int max_proc = std::thread::hardware_concurrency();
-        if (max_proc == 0) max_proc = 2;
+        unsigned int max_proc = static_cast<unsigned int>(pop_size);
         std::vector<ProcInfo> running;
         while((int)offspring.size() < pop_size) {
             while(running.size() < max_proc && (offspring.size() + running.size()) < (size_t)pop_size) {
