@@ -6,7 +6,9 @@
 #include <cmath>
 #include <iostream>
 #include <utility>
+
 #include <future>
+
 
 #if __has_include(<pagmo/pagmo.hpp>)
 #include <pagmo/pagmo.hpp>
@@ -17,7 +19,7 @@
 #include <pagmo/island.hpp>
 #define PAGMO_AVAILABLE 1
 #else
-#pragma message("pagmo library not found, run_nsga2_pagmo_island will be disabled")
+#pragma message("pagmo library not found, run_nsga2_pagmp_island will be disabled")
 #define PAGMO_AVAILABLE 0
 #endif
 
@@ -86,9 +88,11 @@ struct josephson_problem {
 };
 
 //======================================
-// run_nsga2_pagmo_island ：Pagmo Island Model を使った NSGA‐II 実行
+// run_nsga2_pagmp_island ：Pagmo Island Model を使った NSGA‐II 実行
 //======================================
+
 void run_nsga2_pagmo_island(int pop_size,
+
                             int generations,
                             const std::vector<ele_unit>& ele,
                             const std::vector<std::string>& jl_source,
@@ -110,19 +114,17 @@ void run_nsga2_pagmo_island(int pop_size,
 
     archipelago archi;
 
-    std::vector<std::future<island>> init_futs;
+
+    std::vector<std::future<population>> init_futs;
     init_futs.reserve(pop_size);
     for (int i = 0; i < pop_size; ++i) {
-        init_futs.emplace_back(std::async(std::launch::async, [algo, prob]() {
-            population pop{prob, 1u};
-            return island{algo, std::move(pop)};
-
+        init_futs.emplace_back(std::async(std::launch::async, [prob]() {
+            return population{prob, 2u};
         }));
     }
 
     for (auto &fut : init_futs) {
-
-        archi.push_back(fut.get());
+        archi.push_back(island{algo, fut.get()});
 
     }
 
@@ -130,8 +132,10 @@ void run_nsga2_pagmo_island(int pop_size,
     archi.wait();
 
     std::cout << "# Cg\tCc\tCn\tgain\tbandwidth\tripple\n";
+
     for (auto &isl : archi) {
         const auto &pop = isl.get_population();
+
         const auto xv = pop.get_x()[0];
         double Cg = xv[0];
         double Cc = xv[1];
@@ -149,6 +153,7 @@ void run_nsga2_pagmo_island(int pop_size,
     }
 }
 #else
+
 void run_nsga2_pagmo_island(int pop_size,
                             int generations,
                             const std::vector<ele_unit>& ele,
@@ -158,7 +163,7 @@ void run_nsga2_pagmo_island(int pop_size,
                             double Cc_min, double Cc_max) {
     (void)pop_size; (void)generations; (void)ele; (void)jl_source;
     (void)Lj; (void)Cg_min; (void)Cg_max; (void)Cc_min; (void)Cc_max;
-    std::cerr << "run_nsga2_pagmo_island is disabled because pagmo library is not available." << std::endl;
+    std::cerr << "run_nsga2_pagmp_island is disabled because pagmo library is not available." << std::endl;
 }
 #endif
 
