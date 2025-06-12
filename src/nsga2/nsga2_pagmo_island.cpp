@@ -6,7 +6,6 @@
 #include <cmath>
 #include <iostream>
 #include <utility>
-#include <thread>
 
 
 #if __has_include(<pagmo/pagmo.hpp>)
@@ -109,21 +108,13 @@ void run_nsga2_pagmo_island(int pop_size,
         20.0
     ) };
 
-
     archipelago archi(pop_size);
 
-    std::vector<population> pops(pop_size);
-    std::vector<std::thread> workers;
-    workers.reserve(pop_size);
+    std::vector<population> pops;
+    pops.reserve(pop_size);
     for (int i = 0; i < pop_size; ++i) {
-        workers.emplace_back([&, i]() {
-            pops[i] = population{prob, 1u};
-        });
-    }
+        pops.emplace_back(prob, 1u);
 
-    for (auto &t : workers) {
-        t.join();
-    }
 
     for (int i = 0; i < pop_size; ++i) {
         archi.push_back(island{algo, std::move(pops[i])});
