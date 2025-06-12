@@ -113,8 +113,7 @@ void run_nsga2_pagmo_par(int pop_size,
 
     std::cout << "# Cg\tCc\tCn\tgain\tbandwidth\tripple\n";
 
-    unsigned int max_proc = std::thread::hardware_concurrency();
-    if (max_proc == 0) max_proc = 2;
+    unsigned int max_proc = static_cast<unsigned int>(pop.size());
     unsigned int active = 0;
 
     std::size_t finished = 0;
