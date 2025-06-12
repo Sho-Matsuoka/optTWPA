@@ -108,6 +108,9 @@ void run_nsga2_pagmo(int pop_size,
     pagmo::population pop{prob, static_cast<unsigned int>(pop_size)};
     pop = algo.evolve(pop);
 
+    std::ofstream ofs("nsga2_result.csv");
+    ofs << "Cg,Cc,Cn,gain,bandwidth,ripple\n";
+
     std::cout << "# Cg\tCc\tCn\tgain\tbandwidth\tripple\n";
     for (std::size_t i = 0; i < pop.size(); ++i) {
         const auto xv = pop.get_x()[i];
@@ -123,8 +126,15 @@ void run_nsga2_pagmo(int pop_size,
                       << r.gain << "\t"
                       << r.bandwidth << "\t"
                       << r.ripple << "\n";
+            ofs << Cg << ','
+                << Cc << ','
+                << Cn << ','
+                << r.gain << ','
+                << r.bandwidth << ','
+                << r.ripple << '\n';
         }
     }
+    ofs.close();
 }
 #else
 void run_nsga2_pagmo(int pop_size,
