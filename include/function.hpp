@@ -36,12 +36,15 @@ void execute_julia(std::string jl_source);
 void read_jl(std::vector<ele_unit> &ele, std::vector<std::string> &jl_source);
 void write_jl(const std::vector<ele_unit> &ele, const std::vector<std::string> &jl_source, std::size_t tid = 0);
 std::vector<std::vector<double>> read_csv(std::size_t tid = 0);
+void write_jl_mt(const std::vector<ele_unit> &ele, const std::vector<std::string> &jl_source, std::size_t tid = 0);
+std::vector<std::vector<double>> read_csv_mt(std::size_t tid = 0);
 
 //display
 void display_element(const std::vector<ele_unit> &ele);
 
 //calculation
 result calculation(const std::vector<ele_unit> &ele, const std::vector<std::string> &jl_source, std::size_t tid = 0);
+result calculation_mt(const std::vector<ele_unit> &ele, const std::vector<std::string> &jl_source, std::size_t tid = 0);
 double calc_gain(std::vector<std::vector<double>> csv_array, double freq_r);
 double calc_band(std::vector<std::vector<double>> csv_array, double gain);
 double calc_ripple(std::vector<std::vector<double>> csv_array, double freq_r);

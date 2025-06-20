@@ -54,7 +54,9 @@ struct josephson_problem {
         change_param(tmp, "Cn", Cn);
         static std::atomic<std::size_t> eval_counter{0};
         auto eval_id = eval_counter.fetch_add(1, std::memory_order_relaxed);
-        return calculation(tmp, jl_source, eval_id);
+
+        return calculation_mt(tmp, jl_source, eval_id);
+
     }
 
     vector_double fitness(const vector_double &x) const {
