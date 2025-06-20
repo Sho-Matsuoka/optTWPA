@@ -15,8 +15,7 @@
 #include <pagmo/algorithms/nsga2.hpp>
 #include <pagmo/population.hpp>
 #include <pagmo/types.hpp>
-
-#include <pagmo/batch_evaluators/mp_bfe.hpp>
+#include <pagmo/batch_evaluators/thread_bfe.hpp>
 #include <pagmo/batch_evaluators/member_bfe.hpp>
 
 #define PAGMO_AVAILABLE 1
@@ -100,6 +99,10 @@ struct josephson_problem {
 };
 
 
+//======================================
+// run_nsga2_pagmo_mpi ：Pagmo を使った NSGA‐II 実行 (thread_bfe を使用)
+//======================================
+
 void run_nsga2_pagmo_mpi(int pop_size,
                         int generations,
                         const std::vector<ele_unit>& ele,
@@ -114,8 +117,9 @@ void run_nsga2_pagmo_mpi(int pop_size,
 
     pagmo::problem prob{prob_udp};
 
-    pagmo::mp_bfe mp_eval{};
-    pagmo::member_bfe member_eval{prob_udp, &josephson_problem::batch_fitness, mp_eval};
+
+    pagmo::thread_bfe th_eval{};
+    pagmo::member_bfe member_eval{prob_udp, &josephson_problem::batch_fitness, th_eval};
 
 
     pagmo::algorithm algo{ pagmo::nsga2(
