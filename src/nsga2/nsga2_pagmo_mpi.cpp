@@ -15,9 +15,11 @@
 #include <pagmo/algorithms/nsga2.hpp>
 #include <pagmo/population.hpp>
 #include <pagmo/types.hpp>
+
 #include <pagmo/batch_evaluators/mpi_bfe.hpp>
 #include <pagmo/batch_evaluators/member_bfe.hpp>
 #include <mpi.h>
+
 #define PAGMO_AVAILABLE 1
 #else
 #pragma message("pagmo library not found, run_nsga2_pagmo_mpi will be disabled")
@@ -98,9 +100,11 @@ struct josephson_problem {
     std::string get_name() const { return "josephson_problem"; }
 };
 
+
 //======================================
 // run_nsga2_pagmo_mpi ：Pagmo を使った NSGA‐II 実行 (MPI を使用)
 //======================================
+
 void run_nsga2_pagmo_mpi(int pop_size,
                         int generations,
                         const std::vector<ele_unit>& ele,
@@ -108,6 +112,7 @@ void run_nsga2_pagmo_mpi(int pop_size,
                         double Lj,
                         double Cg_min, double Cg_max,
                         double Cc_min, double Cc_max) {
+
     MPI_Init(nullptr, nullptr);
 
     josephson_problem prob_udp(Lj, ele, jl_source);
@@ -128,6 +133,7 @@ void run_nsga2_pagmo_mpi(int pop_size,
     nsga.set_bfe(member_eval);
     pagmo::algorithm algo{nsga};
 
+
     pagmo::population pop{prob, member_eval, static_cast<unsigned int>(pop_size)};
     pop = algo.evolve(pop);
 
@@ -146,10 +152,12 @@ void run_nsga2_pagmo_mpi(int pop_size,
                       << r.gain << "\t"
                       << r.bandwidth << "\t"
                       << r.ripple << "\n";
+
         }
     }
 
     MPI_Finalize();
+
 }
 #else
 void run_nsga2_pagmo_mpi(int pop_size,
