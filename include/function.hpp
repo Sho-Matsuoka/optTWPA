@@ -59,9 +59,8 @@ void run_nsga2(int pop_size,int generations, std::vector<ele_unit> ele, std::vec
 void run_nsga2_par(int pop_size,int generations, std::vector<ele_unit> ele, std::vector<std::string> jl_source, double Lj, double Cg_min, double Cg_max, double Cc_min, double Cc_max);
 void run_nsga2_pagmo(int pop_size, int generations, const std::vector<ele_unit>& ele, const std::vector<std::string>& jl_source, double Lj, double Cg_min, double Cg_max, double Cc_min, double Cc_max);
 void run_nsga2_pagmo_codex(int pop_size, int generations, const std::vector<ele_unit>& ele, const std::vector<std::string>& jl_source, double Lj, double Cg_min, double Cg_max, double Cc_min, double Cc_max);
-void run_nsga2_pagmo_par(int pop_size, int generations, const std::vector<ele_unit>& ele, const std::vector<std::string>& jl_source, double Lj, double Cg_min, double Cg_max, double Cc_min, double Cc_max);
 void run_nsga2_pagmo_bfe(int pop_size, int generations, const std::vector<ele_unit>& ele, const std::vector<std::string>& jl_source, double Lj, double Cg_min, double Cg_max, double Cc_min, double Cc_max);
 void run_nsga2_pagmo_island(int pop_size, int generations, const std::vector<ele_unit>& ele, const std::vector<std::string>& jl_source, double Lj, double Cg_min, double Cg_max, double Cc_min, double Cc_max);
-void run_nsga2_pagmo_mpi(int pop_size, int generations, const std::vector<ele_unit>& ele, const std::vector<std::string>& jl_source, double Lj, double Cg_min, double Cg_max, double Cc_min, double Cc_max);
+
 
 #endif
