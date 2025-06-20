@@ -17,6 +17,7 @@
 #include <pagmo/types.hpp>
 #include <pagmo/batch_evaluators/thread_bfe.hpp>
 #include <pagmo/batch_evaluators/member_bfe.hpp>
+
 #define PAGMO_AVAILABLE 1
 #else
 #pragma message("pagmo library not found, run_nsga2_pagmo_mpi will be disabled")
@@ -97,9 +98,11 @@ struct josephson_problem {
     std::string get_name() const { return "josephson_problem"; }
 };
 
+
 //======================================
 // run_nsga2_pagmo_mpi ：Pagmo を使った NSGA‐II 実行 (thread_bfe を使用)
 //======================================
+
 void run_nsga2_pagmo_mpi(int pop_size,
                         int generations,
                         const std::vector<ele_unit>& ele,
@@ -108,13 +111,16 @@ void run_nsga2_pagmo_mpi(int pop_size,
                         double Cg_min, double Cg_max,
                         double Cc_min, double Cc_max) {
 
+
     josephson_problem prob_udp(Lj, ele, jl_source);
     prob_udp.set_bounds(Cg_min, Cg_max, Cc_min, Cc_max);
 
     pagmo::problem prob{prob_udp};
 
+
     pagmo::thread_bfe th_eval{};
     pagmo::member_bfe member_eval{prob_udp, &josephson_problem::batch_fitness, th_eval};
+
 
     pagmo::algorithm algo{ pagmo::nsga2(
         generations,
@@ -144,6 +150,7 @@ void run_nsga2_pagmo_mpi(int pop_size,
                       << r.gain << "\t"
                       << r.bandwidth << "\t"
                       << r.ripple << "\n";
+
         }
     }
 }
