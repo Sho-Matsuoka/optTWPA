@@ -15,9 +15,10 @@
 #include <pagmo/algorithms/nsga2.hpp>
 #include <pagmo/population.hpp>
 #include <pagmo/types.hpp>
-#include <pagmo/batch_evaluators/mpi_bfe.hpp>
+
+#include <pagmo/batch_evaluators/mp_bfe.hpp>
 #include <pagmo/batch_evaluators/member_bfe.hpp>
-#include <mpi.h>
+
 #define PAGMO_AVAILABLE 1
 #else
 #pragma message("pagmo library not found, run_nsga2_pagmo_mpi will be disabled")
@@ -98,9 +99,7 @@ struct josephson_problem {
     std::string get_name() const { return "josephson_problem"; }
 };
 
-//======================================
-// run_nsga2_pagmo_mpi ：Pagmo を使った NSGA‐II 実行 (MPI Batch Evaluator 使用)
-//======================================
+
 void run_nsga2_pagmo_mpi(int pop_size,
                         int generations,
                         const std::vector<ele_unit>& ele,
@@ -108,19 +107,16 @@ void run_nsga2_pagmo_mpi(int pop_size,
                         double Lj,
                         double Cg_min, double Cg_max,
                         double Cc_min, double Cc_max) {
-    int mpi_initialized = 0;
-    MPI_Initialized(&mpi_initialized);
-    if (!mpi_initialized) {
-        MPI_Init(nullptr, nullptr);
-    }
+
 
     josephson_problem prob_udp(Lj, ele, jl_source);
     prob_udp.set_bounds(Cg_min, Cg_max, Cc_min, Cc_max);
 
     pagmo::problem prob{prob_udp};
 
-    pagmo::mpi_bfe mpi_eval{MPI_COMM_WORLD};
-    pagmo::member_bfe member_eval{prob_udp, &josephson_problem::batch_fitness, mpi_eval};
+    pagmo::mp_bfe mp_eval{};
+    pagmo::member_bfe member_eval{prob_udp, &josephson_problem::batch_fitness, mp_eval};
+
 
     pagmo::algorithm algo{ pagmo::nsga2(
         generations,
@@ -135,31 +131,22 @@ void run_nsga2_pagmo_mpi(int pop_size,
     pagmo::population pop{prob, member_eval, static_cast<unsigned int>(pop_size)};
     pop = algo.evolve(pop);
 
-    int mpi_finalized = 0;
-    MPI_Finalized(&mpi_finalized);
-    if (!mpi_finalized) {
-        MPI_Finalize();
-    }
+    std::cout << "# Cg\tCc\tCn\tgain\tbandwidth\tripple\n";
+    for (std::size_t i = 0; i < pop.size(); ++i) {
+        const auto xv = pop.get_x()[i];
+        double Cg = xv[0];
+        double Cc = xv[1];
+        result r = prob_udp.eval(Cg, Cc);
+        double denom = 3.0 * Lj / (49.0 * 49.0);
+        double Cn = denom - 2.0 * Cg - Cc;
+        if (r.ripple <= 0.1 && Cn > 0.0) {
+            std::cout << Cg << "\t"
+                      << Cc << "\t"
+                      << Cn << "\t"
+                      << r.gain << "\t"
+                      << r.bandwidth << "\t"
+                      << r.ripple << "\n";
 
-    int rank = 0;
-    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-    if (rank == 0) {
-        std::cout << "# Cg\tCc\tCn\tgain\tbandwidth\tripple\n";
-        for (std::size_t i = 0; i < pop.size(); ++i) {
-            const auto xv = pop.get_x()[i];
-            double Cg = xv[0];
-            double Cc = xv[1];
-            result r = prob_udp.eval(Cg, Cc);
-            double denom = 3.0 * Lj / (49.0 * 49.0);
-            double Cn = denom - 2.0 * Cg - Cc;
-            if (r.ripple <= 0.1 && Cn > 0.0) {
-                std::cout << Cg << "\t"
-                          << Cc << "\t"
-                          << Cn << "\t"
-                          << r.gain << "\t"
-                          << r.bandwidth << "\t"
-                          << r.ripple << "\n";
-            }
         }
     }
 }
