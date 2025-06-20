@@ -15,8 +15,10 @@
 #include <pagmo/algorithms/nsga2.hpp>
 #include <pagmo/population.hpp>
 #include <pagmo/types.hpp>
-#include <pagmo/batch_evaluators/thread_bfe.hpp>
+
+#include <pagmo/batch_evaluators/mpi_bfe.hpp>
 #include <pagmo/batch_evaluators/member_bfe.hpp>
+#include <mpi.h>
 
 #define PAGMO_AVAILABLE 1
 #else
@@ -100,7 +102,7 @@ struct josephson_problem {
 
 
 //======================================
-// run_nsga2_pagmo_mpi ：Pagmo を使った NSGA‐II 実行 (thread_bfe を使用)
+// run_nsga2_pagmo_mpi ：Pagmo を使った NSGA‐II 実行 (MPI を使用)
 //======================================
 
 void run_nsga2_pagmo_mpi(int pop_size,
@@ -111,26 +113,26 @@ void run_nsga2_pagmo_mpi(int pop_size,
                         double Cg_min, double Cg_max,
                         double Cc_min, double Cc_max) {
 
+    MPI_Init(nullptr, nullptr);
 
     josephson_problem prob_udp(Lj, ele, jl_source);
     prob_udp.set_bounds(Cg_min, Cg_max, Cc_min, Cc_max);
 
     pagmo::problem prob{prob_udp};
 
+    pagmo::mpi_bfe mpi_eval{MPI_COMM_WORLD};
+    pagmo::member_bfe<josephson_problem> member_eval{prob_udp, &josephson_problem::batch_fitness, mpi_eval};
 
-    pagmo::thread_bfe th_eval{};
-    pagmo::member_bfe member_eval{prob_udp, &josephson_problem::batch_fitness, th_eval};
-
-
-    pagmo::algorithm algo{ pagmo::nsga2(
+    pagmo::nsga2 nsga{
         generations,
         0.9,
         20.0,
-        1.0/2.0,
+        1.0 / 2.0,
         20.0
-    ) };
+    };
+    nsga.set_bfe(member_eval);
+    pagmo::algorithm algo{nsga};
 
-    algo.set_bfe(member_eval);
 
     pagmo::population pop{prob, member_eval, static_cast<unsigned int>(pop_size)};
     pop = algo.evolve(pop);
@@ -153,6 +155,9 @@ void run_nsga2_pagmo_mpi(int pop_size,
 
         }
     }
+
+    MPI_Finalize();
+
 }
 #else
 void run_nsga2_pagmo_mpi(int pop_size,
