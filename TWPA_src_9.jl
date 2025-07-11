@@ -43,13 +43,13 @@ function main()
     push!(circuit, ("P$(j)_$(0)", "$(j)", "0", 2))
 
     circuitdefs = Dict(
-        Lj => IctoLj(6.4e-6),  #IctoLjの引数は臨界電流値. それに応じたジョセフソンインダクタンスを返す.
-        Cg => 10.7428e-15,
-        Cc => 7.57665e-15,
-        Cn => 35.1896e-15,
+        Lj => IctoLj(9.0e-6),  #IctoLjの引数は臨界電流値. それに応じたジョセフソンインダクタンスを返す.
+        Cg => 16e-15,
+        Cc => 14e-15,
+        Cn => 0e-15,
         Cr => 5.00e-12,
         Lr => 65e-12,
-        Cj => 164e-15,
+        Cj => 369e-15,
         Rleft => 50.0,
         Rright => 50.0,
     )
@@ -57,7 +57,7 @@ function main()
 
     ws  = 2π * (1.0:0.1:16.0) * 1e9    #ここで周波数(横軸を変更): (開始値:ステップ幅:終了値)
     wp  = (2π*8.7*1e9,)
-    Ip  = 3.6001e-6
+    Ip  = 5.1001e-6
     sources = [(mode=(1,), port=1, current=Ip)]
     Npumpharmonics       = (20,)
     Nmodulationharmonics = (10,)

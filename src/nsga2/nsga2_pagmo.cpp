@@ -118,7 +118,7 @@ void run_nsga2_pagmo(int pop_size,
         double Cg = xv[0];
         double Cc = xv[1];
         result r = prob_udp.eval(Cg, Cc);
-        double denom = 3.0 * Lj / (49.0 * 49.0);
+        double denom = 3.0 * change_Lj(Lj) / (49.0 * 49.0);
         double Cn = denom - 2.0 * Cg - Cc;
         if (r.ripple <= 0.1 && Cn > 0.0) {
             std::cout << Cg << "\t"
