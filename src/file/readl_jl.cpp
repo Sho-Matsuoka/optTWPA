@@ -13,10 +13,10 @@
 
 using namespace std;
 
-void read_jl(vector<ele_unit> &ele, vector<string> &jl_source){
+void read_jl(vector<ele_unit> &ele, vector<string> &jl_source, string jlfile_name){
  
     //ele.lines.clear();    //reset ele.lines(composed of each line_num)
-    string jlfile_name = "TWPA_src.jl";  //.jl file name (default julia source)
+    //string jlfile_name = "TWPA_src_9.jl";  //.jl file name (default julia source)
     string line, ignore, buf, ele_name; // for reading name  each element.
     //double ele_value = 0;          // for reading value each element.
     int line_num = 0;
@@ -31,6 +31,7 @@ void read_jl(vector<ele_unit> &ele, vector<string> &jl_source){
     if (!file.is_open()) {  // if .jl file can't be opened.
         cerr << "Error opening file: " << jlfile_name;
     }
+    cout << " Source file: " << jlfile_name << endl;
     while(getline(file, line)) {
         liness.clear();   // reset string stream (liness)
         liness.str("");   // the same as above
