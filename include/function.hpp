@@ -38,12 +38,15 @@ void execute_julia(std::string jl_source);
 void read_jl(std::vector<ele_unit> &ele, std::vector<std::string> &jl_source, std::string jlfile_name);
 void write_jl(const std::vector<ele_unit> &ele, const std::vector<std::string> &jl_source, std::size_t tid = 0);
 std::vector<std::vector<double>> read_csv(std::size_t tid = 0);
+void write_jl_mt(const std::vector<ele_unit> &ele, const std::vector<std::string> &jl_source, std::size_t tid = 0);
+std::vector<std::vector<double>> read_csv_mt(std::size_t tid = 0);
 
 //display
 void display_element(const std::vector<ele_unit> &ele);
 
 //calculation
 result calculation(const std::vector<ele_unit> &ele, const std::vector<std::string> &jl_source, std::size_t tid = 0);
+result calculation_mt(const std::vector<ele_unit> &ele, const std::vector<std::string> &jl_source, std::size_t tid = 0);
 double calc_gain(std::vector<std::vector<double>> csv_array, double freq_r);
 double calc_band(std::vector<std::vector<double>> csv_array, double gain);
 double calc_ripple(std::vector<std::vector<double>> csv_array, double freq_r);
@@ -60,5 +63,7 @@ double change_Lj(double Lj);
 void run_nsga2(int pop_size,int generations, std::vector<ele_unit> ele, std::vector<std::string> jl_source, double Lj, double Cg_min, double Cg_max, double Cc_min, double Cc_max);
 void run_nsga2_par(int pop_size,int generations, std::vector<ele_unit> ele, std::vector<std::string> jl_source, double Lj, double Cg_min, double Cg_max, double Cc_min, double Cc_max);
 void run_nsga2_pagmo(int pop_size, int generations, const std::vector<ele_unit>& ele, const std::vector<std::string>& jl_source, double Lj, double Cg_min, double Cg_max, double Cc_min, double Cc_max);
+
+
 
 #endif
