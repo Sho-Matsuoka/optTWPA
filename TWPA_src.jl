@@ -58,7 +58,7 @@ function main()
     ws  = 2π * (1.0:0.1:16.0) * 1e9    #ここで周波数(横軸を変更): (開始値:ステップ幅:終了値)
     wp  = (2π*8.7*1e9,)
     Ip  = 3.6001e-6
-    sources = [(mode=(1,), port=1, current=Ip)]
+    sources = [(mode=(1,), p ort=1, current=Ip)]
     Npumpharmonics       = (20,)
     Nmodulationharmonics = (10,)
 

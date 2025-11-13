@@ -43,20 +43,20 @@ function main()
     push!(circuit, ("P$(j)_$(0)", "$(j)", "0", 2))
 
     circuitdefs = Dict(
-        Lj => IctoLj(6.4e-06),
-        Cg => 20e-15,
-        Cc => 18e-15,
-        Cn => 6e-15,
+        Lj => IctoLj(9e-06),
+        Cg => 1.00001e-15 ,
+        Cc => 21.9e-15,
+        Cn => 21.8e-15,
         Cr => 5e-12,
         Lr => 6.5e-11,
-        Cj => 164e-15,
+        Cj => 369e-15,
         Rleft => 50.0,
         Rright => 50.0,
     )
 
     ws  = 2π * (1.0:0.01:16.0) * 1e9    #ここで周波数(横軸を変更): (開始値:ステップ幅:終了値)
     wp  = (2π*8.7*1e9,)
-    Ip  = 3.6001e-06
+    Ip  = 5.1001e-06
     sources = [(mode=(1,), port=1, current=Ip)]
     Npumpharmonics       = (20,)
     Nmodulationharmonics = (10,)
@@ -135,7 +135,7 @@ end
 
 function plot_gain()
     # CSV読み込み (ヘッダ行を１行スキップ)
-    data = readdlm("freq_gain_3731081.csv", ',', skipstart=1)
+    data = readdlm("freq_gain_sim.csv", ',', skipstart=1)
     x = vec(data[:, 1])   # Frequency [GHz]
     y = vec(data[:, 2])   # Gain [dB]
 
