@@ -42,6 +42,7 @@ void read_jl(vector<ele_unit> &ele, vector<string> &jl_source, string jlfile_nam
         jl_source.emplace_back(line); // insert line to jl_source
 
         if (ele_name == "Lj" || ele_name == "Cg" || ele_name == "Cc" || ele_name == "Cn" || ele_name == "Cr" || ele_name == "Lr" || ele_name == "Ip"){  //read Cg
+        //if (ele_name == "Lj" || ele_name == "Cg" || ele_name == "Cc" || ele_name == "Cn" || ele_name == "Cr" || ele_name == "Lr" || ele_name == "Ip" || ele_name == "wp"){  //read Cg
             //ele_value = stod(buf);   // cast string(buf) => double(ele.Cg)
             if (ele_name == "Lj"){  //read Lj
                 if (buf.find("(") != string::npos){  // insert space after "("
@@ -54,6 +55,24 @@ void read_jl(vector<ele_unit> &ele, vector<string> &jl_source, string jlfile_nam
                 liness.str("");   // the same as above
                 liness << buf;    // buf: IctoL( 6.4e-6 ),
                 liness >> ignore >> buf >> ignore; 
+                //ele.Lj = ele_value;
+                //(ele.lines).push_back(line_num);
+            }
+            else if (ele_name == "wp"){  //read Lj
+                if (buf.find("*") != string::npos){  // insert space after "("
+                    buf.insert(buf.find("*") + 1, " ");
+                }            
+                if (buf.rfind("*") != string::npos){ // insert space before ")"
+                    buf.insert(buf.rfind("*"), " ");
+                }         
+   
+                liness.clear();   // reset string stream (liness)
+                liness.str("");   // the same as above
+                liness << buf;    // buf: IctoL( 6.4e-6 ),
+                liness >> ignore >> buf >> ignore; 
+                double buf2 = stod(buf) * 2 * M_PI * 1e9;
+                cout << buf2 << endl;
+
                 //ele.Lj = ele_value;
                 //(ele.lines).push_back(line_num);
             }
