@@ -44,17 +44,15 @@ function main()
 
     circuitdefs = Dict(
         Lj => IctoLj(9.0e-6),  #IctoLjの引数は臨界電流値. それに応じたジョセフソンインダクタンスを返す.
-        Cg => 16e-15,
-        Cc => 14e-15,
-        Cn => 0e-15,
-        Cr => 5.00e-12,
-        Lr => 65e-12,
+        Cg => 13.8e-15,
+        Cc => 7.68e-15,
+        Cn => 10.4e-15,
+        Cr => 2.50e-12,
+        Lr => 130e-12,
         Cj => 369e-15,
         Rleft => 50.0,
         Rright => 50.0,
     )
-
-
     ws  = 2π * (1.0:0.1:16.0) * 1e9    #ここで周波数(横軸を変更): (開始値:ステップ幅:終了値)
     wp  = (2π*8.7*1e9,)
     Ip  = 5.1001e-6
@@ -165,5 +163,5 @@ end
 # スクリプト実行時に main() を呼ぶ
 if abspath(PROGRAM_FILE) == @__FILE__
     main()
-    #plot_gain()
+    plot_gain()
 end
