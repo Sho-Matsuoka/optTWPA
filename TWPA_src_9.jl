@@ -44,17 +44,17 @@ function main()
 
     circuitdefs = Dict(
         Lj => IctoLj(9.0e-6),  #IctoLjの引数は臨界電流値. それに応じたジョセフソンインダクタンスを返す.
-        Cg => 13.8e-15,
-        Cc => 7.68e-15,
-        Cn => 10.4e-15,
-        Cr => 2.50e-12,
+        Cg => 1.00001e-15 ,
+        Cc => 21.9e-15,
+        Cn => 21.8e-15,
+        Cr => 2.5e-12,
         Lr => 130e-12,
         Cj => 369e-15,
         Rleft => 50.0,
         Rright => 50.0,
     )
     ws  = 2π * (1.0:0.1:16.0) * 1e9    #ここで周波数(横軸を変更): (開始値:ステップ幅:終了値)
-    wp  = (2π*8.7*1e9,)
+    wp  = (2π*8.6*1e9,)
     Ip  = 5.1001e-6
     sources = [(mode=(1,), port=1, current=Ip)]
     Npumpharmonics       = (20,)
@@ -154,6 +154,7 @@ function plot_gain()
         seriestype = :line,
         marker     = :none,
         line       = (:solid, 2),
+        ylims      = (-1, maximum(y)*1.1),
     )
 
     display(plt)

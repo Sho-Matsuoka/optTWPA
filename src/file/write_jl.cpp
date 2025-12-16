@@ -15,13 +15,19 @@
 using namespace std;
 
 void write_jl(const vector<ele_unit> &ele, const vector<string> &jl_source, std::size_t tid){ //for writing .jl file of new parameters
-    stringstream jl_name, liness, csv_line;
+    stringstream jl_name, liness, csv_line, csv_line_plot;
     jl_name << "TWPA_" << getpid();
     if(tid != 0) jl_name << '_' << tid;
     jl_name << ".jl";
+
     csv_line << "    open(\"freq_gain_" <<  getpid();
     if(tid != 0) csv_line << '_' << tid;
     csv_line << ".csv\", \"w\") do io";
+
+    csv_line_plot << "     data = readdlm(\"freq_gain_"<<  getpid();
+    if(tid != 0) csv_line << '_' << tid;
+    csv_line_plot << ".csv\", ',', skipstart=1)";
+
     ofstream fpin(jl_name.str());
     int y = 0;
     vector<string> jl_source_copy = jl_source;
@@ -47,6 +53,9 @@ void write_jl(const vector<ele_unit> &ele, const vector<string> &jl_source, std:
     for (int x = 0; x < jl_source_copy.size(); x++) {     //内容を書き換えたjl_source_copy(バッファ)を全て書く
         if(jl_source_copy[x].find("open") != string::npos){
             jl_source_copy[x] = csv_line.str();
+        }
+        else if(jl_source_copy[x].find("data") == 4){
+            jl_source_copy[x] = csv_line_plot.str();
         }
         fpin << jl_source_copy[x] << endl;  
     }
