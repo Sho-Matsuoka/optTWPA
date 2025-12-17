@@ -35,11 +35,10 @@ int main(int argc, const char *argv[]) {
     //write_jl(ele, jl_source);
     //change_param(ele, "Lj", 6.0e-6);
     //display_element(ele);
-    //display_element(ele);
 
     //cout << out_value(ele, "Lj") << endl;
-    calculation(ele, jl_source);
-    //run_nsga2_pagmo(100, 200, ele, jl_source, out_value(ele, "Lj"), 1e-15, 1e-13, 1e-15, 1e-13);
+    //calculation(ele, jl_source);
+    run_nsga2_pagmo(100, 200, ele, jl_source, out_value(ele, "Lj"), 1e-17, 1e-13, 1e-17, 1e-13, 5e-6, 6e-6, 8e6, 9e6);
     //run_nsga2_pagmo_codex(100, 200, ele, jl_source, out_value(ele, "Lj"), 1e-15, 1e-13, 1e-15, 1e-13);
 
     return 0;
