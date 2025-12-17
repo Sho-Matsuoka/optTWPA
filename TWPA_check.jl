@@ -44,19 +44,18 @@ function main()
 
     circuitdefs = Dict(
         Lj => IctoLj(9e-06),
-        Cg => 1.00001e-15 ,
-        Cc => 21.9e-15,
-        Cn => 21.8e-15,
-        Cr => 5e-12,
-        Lr => 6.5e-11,
+        Cg => 6.17688e-15,
+        Cc => 19.8372e-15,
+        Cn => 13.4992e-15,
+        Cr => 2.5e-12,
+        Lr => 130e-12,
         Cj => 369e-15,
         Rleft => 50.0,
         Rright => 50.0,
     )
-
-    ws  = 2π * (1.0:0.01:16.0) * 1e9    #ここで周波数(横軸を変更): (開始値:ステップ幅:終了値)
-    wp  = (2π*8.7*1e9,)
-    Ip  = 5.1001e-06
+    ws  = 2π * (1.0:0.1:16.0) * 1e9    #ここで周波数(横軸を変更): (開始値:ステップ幅:終了値)
+    wp  = (2π*8.6*1e9,)
+    Ip  = 5.6001e-06
     sources = [(mode=(1,), port=1, current=Ip)]
     Npumpharmonics       = (20,)
     Nmodulationharmonics = (10,)
@@ -123,7 +122,7 @@ function main()
     gain_vec = 10 .* log10.(abs2.(rawS21))
 
     # CSV 出力
-    open("freq_gain_3731081.csv", "w") do io
+    open("freq_gain_sim.csv", "w") do io
         # ヘッダ
         println(io, "frequency_GHz,gain_dB")
         # 各行を f,g の組で書き込み
@@ -154,6 +153,7 @@ function plot_gain()
         seriestype = :line,
         marker     = :none,
         line       = (:solid, 2),
+        ylims      = (-1, maximum(y)*1.1),
     )
 
     display(plt)
