@@ -27,12 +27,14 @@ double compute_Cn(double Cg, double Cc, double Lj) {
 
 // 評価＆制約判定
 // ripple>0.1 なら false を返し，個体は破棄
-bool evaluate(Individual &ind, double Lj, std::vector<ele_unit> ele, std::vector<std::string> jl_source) {
+bool evaluate(Individual &ind, double Lj, const std::vector<ele_unit>& base_ele,
+              const std::vector<std::string>& jl_source) {
 
     //change_param();
     double Cg = ind.x0;
     double Cc = ind.x1;
     double Cn = compute_Cn(Cg, Cc, Lj);
+    auto ele = base_ele;  // 評価用に一時コピー
     change_param(ele, "Cg", Cg);
     change_param(ele, "Cc", Cc);
     if (Cn <= 0.0) return false;
@@ -154,7 +156,7 @@ void mutate(Individual& ind, double eta_m, double pm, double Cg_min, double Cg_m
     if(uni(rng) < pm) ind.x1 = poly(ind.x1, Cc_min, Cc_max);
 }
 
-std::vector<Individual> init_population(int pop_size, std::vector<ele_unit> ele, std::vector<std::string> jl_source, double Lj, double Cg_min, double Cg_max, double Cc_min, double Cc_max) {
+std::vector<Individual> init_population(int pop_size, const std::vector<ele_unit>& ele, const std::vector<std::string>& jl_source, double Lj, double Cg_min, double Cg_max, double Cc_min, double Cc_max) {
     std::uniform_real_distribution<> dCg(Cg_min, Cg_max);
     std::uniform_real_distribution<> dCc(Cc_min, Cc_max);
     std::vector<Individual> pop;
@@ -173,7 +175,7 @@ std::vector<Individual> init_population(int pop_size, std::vector<ele_unit> ele,
 
 } // anonymous
 
-void run_nsga2(int pop_size,int generations, std::vector<ele_unit> ele, std::vector<std::string> jl_source, double Lj, double Cg_min, double Cg_max,  double Cc_min, double Cc_max) {
+void run_nsga2(int pop_size,int generations, const std::vector<ele_unit>& ele, const std::vector<std::string>& jl_source, double Lj, double Cg_min, double Cg_max,  double Cc_min, double Cc_max) {
     // NSGA-II のパラメータ
     const double pc    = 0.9;
     const double eta_c = 20.0;
