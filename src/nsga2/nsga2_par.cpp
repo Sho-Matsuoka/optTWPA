@@ -214,34 +214,43 @@ std::vector<Individual> init_population(int pop_size, std::vector<ele_unit> ele,
     std::uniform_real_distribution<> dCc(Cc_min, Cc_max);
     std::vector<Individual> pop;
     pop.reserve(pop_size);
-    unsigned int max_proc = static_cast<unsigned int>(pop_size);
-    std::vector<ProcInfo> running;
+    const unsigned int max_proc = static_cast<unsigned int>(pop_size);
     int trial = 1;
-    while(pop.size() < (size_t)pop_size) {
-        while(running.size() < max_proc) {
+    while(pop.size() < static_cast<size_t>(pop_size)) {
+        // 事前に個体を必要数生成し、Cn が成立するものだけを並列評価する
+        std::vector<Individual> seeds;
+        seeds.reserve(pop_size);
+        while(seeds.size() < static_cast<size_t>(pop_size)) {
             Individual ind;
             ind.x0 = dCg(rng);
             ind.x1 = dCc(rng);
-            ProcInfo p = spawn_eval(ind, Lj, ele, jl_source);
-            if (p.pid == -1) {
-                if(evaluate(ind, Lj, ele, jl_source)) pop.push_back(ind);
-            } else {
-                running.push_back(p);
-            }
+            const double cn = compute_Cn(ind.x0, ind.x1, Lj);
+            if (cn <= 0.0 || std::isnan(cn)) continue;
+            seeds.push_back(ind);
             std::cout << " This is the " << trial << "th trial" << std::endl;
             ++trial;
-            if(pop.size() + running.size() >= (size_t)pop_size) break;
         }
-        if(!running.empty()) {
-            ProcInfo p = running.front();
-            running.erase(running.begin());
-            Individual res;
-            if(collect_eval(p, res)) pop.push_back(res);
+
+        std::vector<ProcInfo> running;
+        size_t seed_idx = 0;
+        while(seed_idx < seeds.size() || !running.empty()) {
+            while(running.size() < max_proc && seed_idx < seeds.size()) {
+                ProcInfo p = spawn_eval(seeds[seed_idx], Lj, ele, jl_source);
+                if (p.pid == -1) {
+                    if(evaluate(seeds[seed_idx], Lj, ele, jl_source)) pop.push_back(seeds[seed_idx]);
+                } else {
+                    running.push_back(p);
+                }
+                ++seed_idx;
+            }
+            if(!running.empty()) {
+                ProcInfo p = running.front();
+                running.erase(running.begin());
+                Individual res;
+                if(collect_eval(p, res)) pop.push_back(res);
+                if(pop.size() >= static_cast<size_t>(pop_size)) break;
+            }
         }
-    }
-    for(auto &p : running) {
-        Individual res;
-        if(collect_eval(p, res) && pop.size() < (size_t)pop_size) pop.push_back(res);
     }
     return pop;
 }
@@ -267,42 +276,52 @@ void run_nsga2_par(int pop_size,int generations, std::vector<ele_unit> ele, std:
         // オフスプリング生成
         std::vector<Individual> offspring;
         offspring.reserve(pop_size);
-        unsigned int max_proc = static_cast<unsigned int>(pop_size);
-        std::vector<ProcInfo> running;
-        while((int)offspring.size() < pop_size) {
-            while(running.size() < max_proc && (offspring.size() + running.size()) < (size_t)pop_size) {
+        const unsigned int max_proc = static_cast<unsigned int>(pop_size);
+        while(static_cast<int>(offspring.size()) < pop_size) {
+            // まず子個体を必要数生成し、Cn が妥当なものだけをまとめて評価する
+            std::vector<Individual> children;
+            children.reserve(pop_size);
+            while(children.size() < static_cast<size_t>(pop_size)) {
                 std::uniform_int_distribution<> dist(0, pop_size-1);
                 int i1 = tournament(pop, dist(rng), dist(rng));
                 int i2 = tournament(pop, dist(rng), dist(rng));
                 auto [c1, c2] = crossover(pop[i1], pop[i2], eta_c, pc);
                 mutate(c1, eta_m, pm, Cg_min, Cg_max, Cc_min, Cc_max);
                 mutate(c2, eta_m, pm, Cg_min, Cg_max, Cc_min, Cc_max);
-                ProcInfo p1 = spawn_eval(c1, Lj, ele, jl_source);
-                if (p1.pid == -1) {
-                    if(evaluate(c1, Lj, ele, jl_source)) offspring.push_back(c1);
-                } else {
-                    running.push_back(p1);
+                const double cn1 = compute_Cn(c1.x0, c1.x1, Lj);
+                if (cn1 > 0.0 && !std::isnan(cn1)) {
+                    children.push_back(c1);
                 }
-                if((offspring.size() + running.size()) < (size_t)pop_size) {
-                    ProcInfo p2 = spawn_eval(c2, Lj, ele, jl_source);
-                    if (p2.pid == -1) {
-                        if(evaluate(c2, Lj, ele, jl_source)) offspring.push_back(c2);
-                    } else {
-                        running.push_back(p2);
+                if(children.size() < static_cast<size_t>(pop_size)) {
+                    const double cn2 = compute_Cn(c2.x0, c2.x1, Lj);
+                    if (cn2 > 0.0 && !std::isnan(cn2)) {
+                        children.push_back(c2);
                     }
                 }
             }
-            if(!running.empty()) {
-                ProcInfo p = running.front();
-                running.erase(running.begin());
-                Individual res;
-                if(collect_eval(p, res)) offspring.push_back(res);
+
+            std::vector<ProcInfo> running;
+            size_t child_idx = 0;
+            while(child_idx < children.size() || !running.empty()) {
+                while(running.size() < max_proc && child_idx < children.size()) {
+                    ProcInfo p = spawn_eval(children[child_idx], Lj, ele, jl_source);
+                    if (p.pid == -1) {
+                        if(evaluate(children[child_idx], Lj, ele, jl_source) && offspring.size() < static_cast<size_t>(pop_size)) {
+                            offspring.push_back(children[child_idx]);
+                        }
+                    } else {
+                        running.push_back(p);
+                    }
+                    ++child_idx;
+                }
+                if(!running.empty()) {
+                    ProcInfo p = running.front();
+                    running.erase(running.begin());
+                    Individual res;
+                    if(collect_eval(p, res) && offspring.size() < static_cast<size_t>(pop_size)) offspring.push_back(res);
+                    if(offspring.size() >= static_cast<size_t>(pop_size)) break;
+                }
             }
-        }
-        for(auto &p : running) {
-            Individual res;
-            if((int)offspring.size() >= pop_size) break;
-            if(collect_eval(p, res)) offspring.push_back(res);
         }
 
         // 3. 次世代選抜
