@@ -21,7 +21,7 @@ double calc_ripple(vector<vector<double>> csv_array, double freq_r){
     }
 
     double ripple = 0;
-    double freq = freq_r - 0.5; // resonator freq kara 0.5GHz hikui tokoro
+    double freq = freq_r - WIDTH_FR; // resonator freq kara 0.5GHz hikui tokoro
     double min = 0, max = 0;
     double judge_updown = 0; // -1なら減少、1なら上昇 (一つ前のサイクル)
 
