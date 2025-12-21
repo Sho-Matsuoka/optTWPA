@@ -16,6 +16,10 @@ using namespace std;
 
 double calc_ripple(vector<vector<double>> csv_array, double freq_r){
 
+    if (csv_array.empty()) {
+        return 0.0;
+    }
+
     double ripple = 0;
     double freq = freq_r - 0.5; // resonator freq kara 0.5GHz hikui tokoro
     double min = 0, max = 0;
