@@ -16,6 +16,10 @@ using namespace std;
 
 double calc_band(vector<vector<double>> csv_array, double gain) {
 
+    if (csv_array.empty()) {
+        return 0.0;
+    }
+
     //double gain_half = gain / 2;
     double freq_l = 0, freq_h = 0;
     double bandwidth = 0;

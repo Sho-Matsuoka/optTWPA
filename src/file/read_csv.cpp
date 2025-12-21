@@ -32,13 +32,14 @@ vector<vector<double>> read_csv(std::size_t tid) {
 
     if (!fp_csv.is_open()) {
         cerr << "No output of JoSIM."  << endl;
+        return csv_array;
     }
 
     fp_csv.seekg(0, ios::end);
     if (fp_csv.tellg() == 0) {
         cerr << "ERROR : Output File(.csv) is empty. Julia execution may have some errors." << endl;
         fp_csv.close();
-        exit(1);
+        return csv_array;
     }
     fp_csv.seekg(0, ios::beg);
 
