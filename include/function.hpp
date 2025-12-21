@@ -2,6 +2,7 @@
 #define FUNCTION_H
 
 constexpr double WIDTH_F = 1.5;
+constexpr double WIDTH_FR = 1.0;
 constexpr double PHI_0 = 2.067833848e-15;
 
 extern double gain_th;
