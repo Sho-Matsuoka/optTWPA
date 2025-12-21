@@ -42,6 +42,9 @@ void write_jl(const vector<ele_unit> &ele, const vector<string> &jl_source, std:
         if(ele[x].name == "Lj"){
             liness << "        " << ele[x].name << " => " << "IctoLj(" << ele[x].value  << ")" << ",";
         }
+        else if(ele[x].name == "wp"){
+            liness << "    " << ele[x].name << "  = (2π*" << ele[x].value << ",)";
+        }
         else if(ele[x].name == "Ip"){
             liness << "    " << ele[x].name << "  = " << ele[x].value;
         }
