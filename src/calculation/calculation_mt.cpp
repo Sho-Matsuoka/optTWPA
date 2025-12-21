@@ -32,6 +32,10 @@ result calculation_mt(const vector<ele_unit> &ele,
     execute_julia(jl_name.str()); // julia を実行
 
     vector<vector<double>> csv_array = read_csv_mt(tid);
+    if (csv_array.empty()) {
+        // Julia execution failed or returned no data; penalize solution
+        return {0.0, 0.0, 1.0};
+    }
 
     result.gain = calc_gain(csv_array, calc_freq_r(ele));
     result.bandwidth = calc_band(csv_array, result.gain);
