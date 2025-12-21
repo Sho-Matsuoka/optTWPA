@@ -21,7 +21,7 @@ double calc_gain(vector<vector<double>> csv_array, double freq_r) {
     }
 
     double gain = csv_array[0][1];
-    double freq = freq_r - 0.5; // resonator freq kara 0.5GHz hikui tokoro
+    double freq = freq_r - WIDTH_FR; // resonator freq kara 0.5GHz hikui tokoro
     //double width = 1.5; // tansaku no haba
 
     for (auto& column : csv_array) {
