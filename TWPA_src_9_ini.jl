@@ -43,10 +43,10 @@ function main()
     push!(circuit, ("P$(j)_$(0)", "$(j)", "0", 2))
 
     circuitdefs = Dict(
-        Lj => IctoLj(9e-06),
-        Cg => 1.4147e-15,
-        Cc => 22.6193e-15,
-        Cn => 20.2412e-15,
+        Lj => IctoLj(9.0e-6),  #IctoLjの引数は臨界電流値. それに応じたジョセフソンインダクタンスを返す.
+        Cg => 13.8e-15,
+        Cc => 7.68e-15,
+        Cn => 10.4e-15,
         Cr => 2.5e-12,
         Lr => 130e-12,
         Cj => 369e-15,
@@ -54,8 +54,8 @@ function main()
         Rright => 50.0,
     )
     ws  = 2π * (1.0:0.1:16.0) * 1e9    #ここで周波数(横軸を変更): (開始値:ステップ幅:終了値)
-    wp  = (2π*8.6e9,)
-    Ip  = 5.6001e-06
+    wp  = (2π*8.6*1e9,)
+    Ip  = 5.1001e-6
     sources = [(mode=(1,), port=1, current=Ip)]
     Npumpharmonics       = (20,)
     Nmodulationharmonics = (10,)
@@ -132,6 +132,7 @@ function main()
     end
 end
 
+
 function plot_gain()
     # CSV読み込み (ヘッダ行を１行スキップ)
     data = readdlm("freq_gain_sim.csv", ',', skipstart=1)
@@ -153,7 +154,6 @@ function plot_gain()
         seriestype = :line,
         marker     = :none,
         line       = (:solid, 2),
-        ylims      = (-1, maximum(y)*1.1),
     )
 
     display(plt)
