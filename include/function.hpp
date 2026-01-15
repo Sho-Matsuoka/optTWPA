@@ -53,6 +53,7 @@ double calc_band(std::vector<std::vector<double>> csv_array, double gain);
 double calc_ripple(std::vector<std::vector<double>> csv_array, double freq_r);
 double calc_freq_r(std::vector<ele_unit> ele);
 double calc_imp(std::vector<ele_unit> ele);
+double calc_max(std::vector<std::vector<double>> csv_array, double freq_r);
 
 //parameter
 std::vector<ele_unit> change_param(std::vector<ele_unit> &ele, const std::string ele_name, double value);

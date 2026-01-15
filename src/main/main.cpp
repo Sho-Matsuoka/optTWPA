@@ -38,7 +38,7 @@ int main(int argc, const char *argv[]) {
 
     //cout << out_value(ele, "Lj") << endl;
     calculation(ele, jl_source);
-    run_nsga2_pagmo(100, 200, ele, jl_source, out_value(ele, "Lj"), 1e-17, 1e-13, 1e-17, 1e-13, 5.5e-6, 6.5e-6, 8e6, 9e6);
+    run_nsga2_pagmo(100, 200, ele, jl_source, out_value(ele, "Lj"), 1e-17, 1e-13, 1e-17, 1e-13, 5e-6, 6e-6, 8e9, 9e9);
     //run_nsga2_pagmo_codex(100, 200, ele, jl_source, out_value(ele, "Lj"), 1e-15, 1e-13, 1e-15, 1e-13);
 
     return 0;

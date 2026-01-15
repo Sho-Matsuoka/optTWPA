@@ -37,6 +37,9 @@ result calculation(const vector<ele_unit> &ele, const vector<string> &jl_source,
     result.gain = calc_gain(csv_array, calc_freq_r(ele));
     result.bandwidth = calc_band(csv_array, result.gain);
     result.ripple = calc_ripple(csv_array, calc_freq_r(ele));
+    if(calc_max(csv_array, calc_freq_r(ele)) == 1){
+        result.ripple = 100;
+    }
 
     cout << " Gain     : " << result.gain << " dB" << endl;
     cout << " Bandwidth: " << result.bandwidth<< " GHz" << endl;

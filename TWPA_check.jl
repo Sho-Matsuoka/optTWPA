@@ -44,18 +44,18 @@ function main()
 
     circuitdefs = Dict(
         Lj => IctoLj(9e-06),
-        Cg => 1.4147e-15,
-        Cc => 22.6193e-15,
-        Cn => 20.2412e-15,
+        Cg => 1.60579e-15,
+        Cc => 26.4827e-15,
+        Cn => 15.9958e-15,
         Cr => 2.5e-12,
         Lr => 130e-12,
         Cj => 369e-15,
         Rleft => 50.0,
         Rright => 50.0,
     )
-    ws  = 2π * (1.0:0.1:16.0) * 1e9    #ここで周波数(横軸を変更): (開始値:ステップ幅:終了値)
-    wp  = (2π*8.6e9,)
-    Ip  = 5.6001e-06
+    ws  = 2π * (1.0:0.01:16.0) * 1e9    #ここで周波数(横軸を変更): (開始値:ステップ幅:終了値)
+    wp  = (2π*8.61991e9,)
+    Ip  = 6.15472e-06
     sources = [(mode=(1,), port=1, current=Ip)]
     Npumpharmonics       = (20,)
     Nmodulationharmonics = (10,)
