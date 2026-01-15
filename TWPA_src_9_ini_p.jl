@@ -140,5 +140,5 @@ end
 # スクリプト実行
 if abspath(PROGRAM_FILE) == @__FILE__
     main()
-    plot_gain()
+    #plot_gain()
 end
